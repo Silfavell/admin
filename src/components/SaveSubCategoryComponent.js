@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { IoMdCreate, IoIosClose } from 'react-icons/io'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
