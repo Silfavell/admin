@@ -12,12 +12,16 @@ class SaveProductComponent extends Component {
         productsWithCategories: [],
         brandMode: 0,
 
+        updateId: null,
+
         categoryId: null,
         subCategoryId: null,
         name: null,
         price: null,
         brand: null,
         colorGroup: null,
+        colorName: null,
+        colorCode: null,
         images: []
     }
 
@@ -29,6 +33,12 @@ class SaveProductComponent extends Component {
         axios.get(`${process.env.REACT_APP_API_URL}/products-with-categories`).then(({ data, status }) => data)
     )
 
+    getImage = (imagePath, index) => {
+        return axios.get(`http://localhost:3000/static?folder=products&image=${imagePath}-${index}.webp`, { responseType: 'blob' }).then(({ data }) => {
+            return data
+        })
+    }
+
     UNSAFE_componentWillMount() {
         Promise.all([this.getCategories(), this.getProductsWithCategories()]).then((vals) => {
             this.setState({ categories: vals[0], productsWithCategories: vals[1] })
@@ -36,15 +46,50 @@ class SaveProductComponent extends Component {
     }
 
     onChange = (event) => {
-        const categoryObj = event.target.name === 'categoryId' ? {
+        const { name, value } = event.target
+
+
+        const categoryObj = name === 'categoryId' ? {
             brand: null,
             subCategoryId: null
         } : {}
 
-        this.setState({
-            [event.target.name]: event.target.value,
-            ...categoryObj
-        })
+        let productObj = {}
+
+        if (name === 'updateId') {
+            this.state.productsWithCategories.map((category) => {
+                category.subCategories.map((subCategory) => {
+                    subCategory.products.map((product) => {
+                        if (product._id === value) {
+                            productObj = product
+                            product.colorGroup = product.color ? product.colorGroup : null
+                            productObj.colorCode = product.color?.code ?? null
+                            productObj.colorName = product.color?.name ?? null
+                        }
+                    })
+                })
+            })
+
+            const imageRequests = Array.from(new Array(productObj.imageCount)).map((_, index) => {
+                return this.getImage(productObj.image, index)
+            })
+
+            Promise.all(imageRequests).then((images) => {
+                this.setState({
+                    [name]: value,
+                    images,
+                    ...categoryObj,
+                    ...productObj
+                })
+            })
+        } else {
+            this.setState({
+                [event.target.name]: event.target.value,
+                ...categoryObj,
+                ...productObj
+            })
+        }
+
     }
 
     changeBrandMode = () => {
@@ -55,48 +100,73 @@ class SaveProductComponent extends Component {
         this.setState({ colorGroup: null })
     }
 
+    onRemoveUpdateIdClick = () => {
+        this.setState({ updateId: null })
+    }
+
+    onRemoveImageClick = (index) => {
+        this.state.images.splice(index, 1)
+        this.setState({ images: this.state.images })
+    }
+
     onSaveProductClick = () => {
-        const {
-            categoryId,
-            subCategoryId,
-            name,
-            colorGroup,
-            colorName,
-            colorCode,
-            brand,
-            price,
-            images
-        } = this.state
+        if (window.confirm(`${this.state.name} isimli ürünü eklemek istediğinize emin misiniz?`)) {
+            const {
+                updateId,
+                categoryId,
+                subCategoryId,
+                name,
+                colorGroup,
+                colorName,
+                colorCode,
+                brand,
+                price,
+                images
+            } = this.state
 
-        const formData = new FormData()
-        // eslint-disable-next-line
-        images.map((image, index) => {
-            formData.append('image-' + index, image)
-        })
+            const formData = new FormData()
+            // eslint-disable-next-line
+            images.map((image, index) => {
+                formData.append('image-' + index, image)
+            })
 
-        formData.append('categoryId', categoryId)
-        formData.append('subCategoryId', subCategoryId)
-        formData.append('name', name)
-        colorGroup && formData.append('colorGroup', colorGroup)
-        colorGroup && formData.append('color', JSON.stringify({
-            name: colorName,
-            code: colorCode
-        }))
-        formData.append('brand', brand)
-        formData.append('price', price)
+            formData.append('categoryId', categoryId)
+            formData.append('subCategoryId', subCategoryId)
+            formData.append('name', name)
+            colorGroup && formData.append('colorGroup', colorGroup)
+            colorGroup && formData.append('color', JSON.stringify({
+                name: colorName,
+                code: colorCode
+            }))
+            formData.append('brand', brand)
+            formData.append('price', price)
 
-
-        axios.post(`${process.env.REACT_APP_API_URL}/admin/product`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
+            if (updateId) {
+                axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${updateId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(({ status }) => {
+                    if (status === 200) {
+                        alert('Ürün güncellendi')
+                    }
+                }).catch((reason) => {
+                    alert(reason.response.data.error)
+                })
+            } else {
+                axios.post(`${process.env.REACT_APP_API_URL}/admin/product`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(({ status }) => {
+                    if (status === 200) {
+                        alert('Ürün eklendi')
+                    }
+                }).catch((reason) => {
+                    alert(reason.response.data.error)
+                })
             }
-        }).then(({ status }) => {
-            if (status === 200) {
-                alert('Ürün eklendi')
-            }
-        }).catch((reason) => {
-            alert(reason.response.data.error)
-        })
+        }
     }
 
     handleFileChange = (event) => {
@@ -121,6 +191,7 @@ class SaveProductComponent extends Component {
 
     render() {
         const {
+            updateId,
             categories,
             productsWithCategories,
             brandMode,
@@ -139,6 +210,44 @@ class SaveProductComponent extends Component {
         return (
             <div className='p-3 border'>
                 <div className='col-md-12'>
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='updateId' className='text-black'>Düzenlemek istediğin ürünü seçebilirsin</label>
+
+                            <div className='d-flex'>
+
+                                <div style={{ flex: 1 }}>
+                                    <select
+                                        type='text'
+                                        className='form-control'
+                                        id='updateId'
+                                        name='updateId'
+                                        onChange={this.onChange}
+                                        value={updateId}>
+                                        <option selected disabled value={null}>Düzenlemek istediğin ürünü seçebilirsin</option>
+                                        {
+                                            productsWithCategories.map((category) => {
+                                                return category.subCategories.map((subCategory) => {
+                                                    return subCategory.products.map((product) => (
+                                                        <option value={product._id}>{product.name}</option>
+                                                    ))
+                                                })
+                                            })
+                                        }
+                                    </select>
+                                </div>
+
+                                <div
+                                    className={'ml-2 px-3 border d-flex align-items-center justify-content-center'}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={this.onRemoveUpdateIdClick}>
+                                    <IoIosClose size={24} />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
                     <div className='form-group row'>
 
                         <div className='col-md-6'>
@@ -267,7 +376,7 @@ class SaveProductComponent extends Component {
                                             productsWithCategories.find((category) => category._id === categoryId)
                                                 ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
                                                 ?.products.map((product) => (
-                                                    product.colorGroup && <option value={product.colorGroup}>{product.name}</option>
+                                                    product.colorGroup && <option value={product._id}>{product.name}</option>
                                                 ))
                                         }
                                     </select>
@@ -331,15 +440,35 @@ class SaveProductComponent extends Component {
                         </div>
 
                         {
-                            images.map((image) => <img alt='' className='col-md-12 preview ml-4 mb-4' ref={ref => this.getImageData(ref, image)} />)
+                            images.map((image, index) => (
+                                <div className='col-md-12 preview ml-4 mb-4' style={{ position: 'relative' }}>
+                                    <div
+                                        onClick={() => this.onRemoveImageClick(index)}
+                                        style={{ position: 'absolute', top: 10, right: 10, padding: 5, cursor: 'pointer', backgroundColor: 'red' }}>
+                                        <IoIosClose size={24} />
+                                    </div>
+                                    <img style={{ width: '100%', height: '100%' }} alt='' ref={ref => this.getImageData(ref, image)} />
+                                </div>
+                            ))
                         }
                     </div>
 
-                    <div className='form-group row'>
-                        <div className='col-lg-12'>
-                            <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü ekle</button>
-                        </div>
-                    </div>
+                    {
+                        !updateId ? (
+                            <div className='form-group row mt-4'>
+                                <div className='col-lg-12'>
+                                    <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü ekle</button>
+                                </div>
+                            </div>
+                        ) : (
+                                <div className='form-group row mt-4'>
+                                    <div className='col-lg-12'>
+                                        <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü güncelle</button>
+                                    </div>
+                                </div>
+                            )
+                    }
+
                 </div>
             </div>
         )

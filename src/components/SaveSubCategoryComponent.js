@@ -16,16 +16,18 @@ class SaveSubCategoryComponent extends Component {
     }
 
     onSaveClick = () => {
-        axios.post(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
-            parentCategoryId: this.state.parentCategory,
-            name: this.state.subCategoryName
-        }).then(({ status, data }) => {
-            if (status === 200) {
-                alert('Alt kategori eklendi')
-            }
-        }).catch((reason) => {
-            alert(reason.response.data.error)
-        })
+        if (window.confirm(`${this.state.subCategoryName} isimli alt kategoriyi eklemek istediğinize emin misiniz ?`)) {
+            axios.post(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
+                parentCategoryId: this.state.parentCategory,
+                name: this.state.subCategoryName
+            }).then(({ status, data }) => {
+                if (status === 200) {
+                    alert('Alt kategori eklendi')
+                }
+            }).catch((reason) => {
+                alert(reason.response.data.error)
+            })
+        }
     }
 
     getCategories = () => (
@@ -57,7 +59,7 @@ class SaveSubCategoryComponent extends Component {
                             name='parentCategory'
                             onChange={this.onChange}
                             value={parentCategory}>
-                            <option selected unselectable value={null}>Üst kategori seçiniz</option>
+                            <option selected unselectable={'true'} value={null}>Üst kategori seçiniz</option>
                             {
                                 categories.map((category) => (
                                     <option value={category._id}>{category.name}</option>
@@ -80,7 +82,7 @@ class SaveSubCategoryComponent extends Component {
                             value={subCategoryName} />
                     </div>
                 </div>
-                            
+
                 <div className='form-group'>
                     <div className='col-md-12'>
                         <button className='btn btn-primary btn-block' onClick={this.onSaveClick}>Alt kategori ekle</button>

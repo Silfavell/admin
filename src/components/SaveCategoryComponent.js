@@ -14,15 +14,17 @@ class SaveSubCategoryComponent extends Component {
     }
 
     onSaveClick = () => {
-        axios.post(`${process.env.REACT_APP_API_URL}/admin/category`, {
-            name: this.state.name
-        }).then(({ status, data }) => {
-            if (status === 200) {
-                alert('Kategori eklendi')
-            }
-        }).catch((reason) => {
-            alert(reason.response.data.error)
-        })
+        if (window.confirm(`${this.state.name} isimli kategoriyi eklemek istediğinize emin misiniz ?`)) {
+            axios.post(`${process.env.REACT_APP_API_URL}/admin/category`, {
+                name: this.state.name
+            }).then(({ status, data }) => {
+                if (status === 200) {
+                    alert('Kategori eklendi')
+                }
+            }).catch((reason) => {
+                alert(reason.response.data.error)
+            })
+        }
     }
 
     render() {
