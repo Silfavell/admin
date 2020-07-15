@@ -3,6 +3,7 @@ import axios from 'axios'
 import { IoMdCreate, IoIosClose } from 'react-icons/io'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './save-product.scss'
 
 class SaveProductComponent extends Component {
 
@@ -16,7 +17,8 @@ class SaveProductComponent extends Component {
         name: null,
         price: null,
         brand: null,
-        colorGroup: null
+        colorGroup: null,
+        images: []
     }
 
     getCategories = () => (
@@ -62,24 +64,32 @@ class SaveProductComponent extends Component {
             colorName,
             colorCode,
             brand,
-            price
+            price,
+            images
         } = this.state
 
-        const colorGroupObj = colorGroup ? {
-            colorGroup,
-            color: {
-                name: colorName,
-                code: colorCode
-            }
-        } : {}
+        const formData = new FormData()
+        // eslint-disable-next-line
+        images.map((image, index) => {
+            formData.append('image-' + index, image)
+        })
 
-        axios.post(`${process.env.REACT_APP_API_URL}/admin/product`, {
-            categoryId,
-            subCategoryId,
-            name,
-            brand,
-            price: parseInt(price),
-            ...colorGroupObj
+        formData.append('categoryId', categoryId)
+        formData.append('subCategoryId', subCategoryId)
+        formData.append('name', name)
+        colorGroup && formData.append('colorGroup', colorGroup)
+        colorGroup && formData.append('color', {
+            name: colorName,
+            code: colorCode
+        })
+        formData.append('brand', brand)
+        formData.append('price', price)
+
+
+        axios.post(`${process.env.REACT_APP_API_URL}/admin/product`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
         }).then(({ status, data }) => {
             if (status === 200) {
                 alert('Ürün eklendi')
@@ -89,11 +99,32 @@ class SaveProductComponent extends Component {
         })
     }
 
+    handleFileChange = (event) => {
+        const { files } = event.target
+
+        if (files && files[0]) {
+            this.state.images.push(files[0])
+            this.setState({ images: this.state.images })
+        }
+    }
+
+    getImageData = (target, imageFile) => {
+        let reader = new FileReader()
+
+        reader.onload = (event) => {
+            if (target)
+                target.src = event.target.result
+        }
+
+        reader.readAsDataURL(imageFile)
+    }
+
     render() {
         const {
             categories,
             productsWithCategories,
             brandMode,
+            images,
 
             categoryId,
             subCategoryId,
@@ -281,6 +312,28 @@ class SaveProductComponent extends Component {
                             </div>
                         )
                     }
+
+                    <div className='d-flex direction-column' style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
+
+                        <div className='col-md-12 preview mb-4'>
+                            <label
+                                id='image-label'
+                                htmlFor='image'
+                                onChange={this.handleFileChange}
+                                className='text-black'>Ürün Resimi <span className='text-danger'>*</span>
+                            </label>
+                            <input
+                                id='image'
+                                type='file'
+                                accept='image/*'
+                                onChange={this.handleFileChange}
+                            />
+                        </div>
+
+                        {
+                            images.map((image) => <img alt='' className='col-md-12 preview ml-4 mb-4' ref={ref => this.getImageData(ref, image)} />)
+                        }
+                    </div>
 
                     <div className='form-group row'>
                         <div className='col-lg-12'>

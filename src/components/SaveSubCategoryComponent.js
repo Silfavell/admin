@@ -80,10 +80,10 @@ class SaveSubCategoryComponent extends Component {
                             value={subCategoryName} />
                     </div>
                 </div>
-
+                            
                 <div className='form-group'>
                     <div className='col-md-12'>
-                        <button className='btn btn-primary btn-block' onClick={this.onSaveClick}>Alt kategori Ekle</button>
+                        <button className='btn btn-primary btn-block' onClick={this.onSaveClick}>Alt kategori ekle</button>
                     </div>
                 </div>
             </div>
