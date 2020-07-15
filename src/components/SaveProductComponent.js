@@ -78,10 +78,10 @@ class SaveProductComponent extends Component {
         formData.append('subCategoryId', subCategoryId)
         formData.append('name', name)
         colorGroup && formData.append('colorGroup', colorGroup)
-        colorGroup && formData.append('color', {
+        colorGroup && formData.append('color', JSON.stringify({
             name: colorName,
             code: colorCode
-        })
+        }))
         formData.append('brand', brand)
         formData.append('price', price)
 
@@ -90,7 +90,7 @@ class SaveProductComponent extends Component {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        }).then(({ status, data }) => {
+        }).then(({ status }) => {
             if (status === 200) {
                 alert('Ürün eklendi')
             }
