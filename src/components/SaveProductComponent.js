@@ -18,6 +18,7 @@ class SaveProductComponent extends Component {
         subCategoryId: null,
         name: null,
         price: null,
+        discountedPrice: null,
         brand: null,
         colorGroup: null,
         colorName: null,
@@ -121,6 +122,7 @@ class SaveProductComponent extends Component {
                 colorCode,
                 brand,
                 price,
+                discountedPrice,
                 images
             } = this.state
 
@@ -140,6 +142,7 @@ class SaveProductComponent extends Component {
             }))
             formData.append('brand', brand)
             formData.append('price', price)
+            formData.append('discountedPrice', discountedPrice)
 
             if (updateId) {
                 axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${updateId}`, formData, {
@@ -202,6 +205,7 @@ class SaveProductComponent extends Component {
             name,
             brand,
             price,
+            discountedPrice,
             colorGroup,
             colorName,
             colorCode
@@ -312,6 +316,20 @@ class SaveProductComponent extends Component {
                                 onChange={this.onChange}
                                 placeholder='Ürün fiyatı giriniz'
                                 value={price} />
+                        </div>
+                    </div>
+
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='price' className='text-black'>İndirimli Fiyat <span className='text-danger'>*</span> </label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='discountedPrice'
+                                name='discountedPrice'
+                                onChange={this.onChange}
+                                placeholder='İndirimli Ürün fiyatı giriniz'
+                                value={discountedPrice} />
                         </div>
                     </div>
 
