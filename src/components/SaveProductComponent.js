@@ -12,17 +12,17 @@ class SaveProductComponent extends Component {
         productsWithCategories: [],
         brandMode: 0,
 
-        updateId: null,
+        updateId: '',
 
-        categoryId: null,
-        subCategoryId: null,
-        name: null,
-        price: null,
-        discountedPrice: null,
-        brand: null,
-        colorGroup: null,
-        colorName: null,
-        colorCode: null,
+        categoryId: '',
+        subCategoryId: '',
+        name: '',
+        price: '',
+        discountedPrice: '',
+        brand: '',
+        colorGroup: '',
+        colorName: '',
+        colorCode: '',
         images: []
     }
 
@@ -49,10 +49,14 @@ class SaveProductComponent extends Component {
     onChange = (event) => {
         const { name, value } = event.target
 
-
         const categoryObj = name === 'categoryId' ? {
-            brand: null,
-            subCategoryId: null
+            brand: '',
+            subCategoryId: ''
+        } : {}
+
+        const colorGroupObj = name === 'colorGroup' ? {
+            colorName: '',
+            colorCode: ''
         } : {}
 
         let productObj = {}
@@ -80,14 +84,16 @@ class SaveProductComponent extends Component {
                     [name]: value,
                     images,
                     ...categoryObj,
-                    ...productObj
+                    ...productObj,
+                    ...colorGroupObj
                 })
             })
         } else {
             this.setState({
-                [event.target.name]: event.target.value,
+                [name]: value,
                 ...categoryObj,
-                ...productObj
+                ...productObj,
+                ...colorGroupObj
             })
         }
 
@@ -98,11 +104,11 @@ class SaveProductComponent extends Component {
     }
 
     onRemoveColorGroupClick = () => {
-        this.setState({ colorGroup: null })
+        this.setState({ colorGroup: '' })
     }
 
     onRemoveUpdateIdClick = () => {
-        this.setState({ updateId: null })
+        this.setState({ updateId: '' })
     }
 
     onRemoveImageClick = (index) => {
@@ -110,42 +116,48 @@ class SaveProductComponent extends Component {
         this.setState({ images: this.state.images })
     }
 
+    getFormData = () => {
+        const {
+            updateId,
+            categoryId,
+            subCategoryId,
+            name,
+            colorGroup,
+            colorName,
+            colorCode,
+            brand,
+            price,
+            discountedPrice,
+            images
+        } = this.state
+
+        const formData = new FormData()
+        // eslint-disable-next-line
+        images.map((image, index) => {
+            formData.append('image-' + index, image)
+        })
+
+        categoryId.length > 0 && formData.append('categoryId', categoryId)
+        subCategoryId.length > 0 && formData.append('subCategoryId', subCategoryId)
+        name.length > 0 && formData.append('name', name)
+        colorGroup.length > 0 && formData.append('colorGroup', colorGroup)
+        colorName.length > 0 && colorCode.length > 0 && formData.append('color', JSON.stringify({
+            name: colorName,
+            code: colorCode
+        }))
+        brand.length > 0 && formData.append('brand', brand)
+        price.length > 0 && formData.append('price', price)
+        discountedPrice.length > 0 && formData.append('discountedPrice', discountedPrice)
+
+        return formData
+    }
+
     onSaveProductClick = () => {
         if (window.confirm(`${this.state.name} isimli ürünü eklemek istediğinize emin misiniz?`)) {
-            const {
-                updateId,
-                categoryId,
-                subCategoryId,
-                name,
-                colorGroup,
-                colorName,
-                colorCode,
-                brand,
-                price,
-                discountedPrice,
-                images
-            } = this.state
+            const formData = this.getFormData()
 
-            const formData = new FormData()
-            // eslint-disable-next-line
-            images.map((image, index) => {
-                formData.append('image-' + index, image)
-            })
-
-            formData.append('categoryId', categoryId)
-            formData.append('subCategoryId', subCategoryId)
-            formData.append('name', name)
-            colorGroup && formData.append('colorGroup', colorGroup)
-            colorGroup && formData.append('color', JSON.stringify({
-                name: colorName,
-                code: colorCode
-            }))
-            formData.append('brand', brand)
-            formData.append('price', price)
-            formData.append('discountedPrice', discountedPrice)
-
-            if (updateId) {
-                axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${updateId}`, formData, {
+            if (this.state.updateId) {
+                axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${this.state.updateId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -411,34 +423,30 @@ class SaveProductComponent extends Component {
                         </div>
                     </div>
 
-                    {
-                        colorGroup && (
-                            <div className='form-group row'>
-                                <div className='col-md-6'>
-                                    <label htmlFor='colorName' className='text-black'>Renk adı <span className='text-danger'>*</span></label>
-                                    <input
-                                        type='text'
-                                        className='form-control'
-                                        id='colorName'
-                                        name='colorName'
-                                        onChange={this.onChange}
-                                        value={colorName}
-                                        placeholder='Renk adı giriniz' />
-                                </div>
-                                <div className='col-md-6'>
-                                    <label htmlFor='colorCode' className='text-black'>Renk kodu <span className='text-danger'>*</span></label>
-                                    <input
-                                        type='text'
-                                        className='form-control'
-                                        id='colorCode'
-                                        name='colorCode'
-                                        onChange={this.onChange}
-                                        value={colorCode}
-                                        placeholder='Renk kodu giriniz' />
-                                </div>
-                            </div>
-                        )
-                    }
+                    <div className='form-group row'>
+                        <div className='col-md-6'>
+                            <label htmlFor='colorName' className='text-black'>Renk adı</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='colorName'
+                                name='colorName'
+                                onChange={this.onChange}
+                                value={colorName}
+                                placeholder='Renk adı giriniz' />
+                        </div>
+                        <div className='col-md-6'>
+                            <label htmlFor='colorCode' className='text-black'>Renk kodu</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='colorCode'
+                                name='colorCode'
+                                onChange={this.onChange}
+                                value={colorCode}
+                                placeholder='Renk kodu giriniz' />
+                        </div>
+                    </div>
 
                     <div className='d-flex direction-column' style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
 
