@@ -240,7 +240,7 @@ class SaveProductComponent extends Component {
                                         name='updateId'
                                         onChange={this.onChange}
                                         value={updateId}>
-                                        <option selected disabled value={null}>Düzenlemek istediğin ürünü seçebilirsin</option>
+                                        <option selected unselectable value={null}>Düzenlemek istediğin ürünü seçebilirsin</option>
                                         {
                                             productsWithCategories.map((category) => {
                                                 return category.subCategories.map((subCategory) => {
@@ -274,7 +274,7 @@ class SaveProductComponent extends Component {
                                 name='categoryId'
                                 onChange={this.onChange}
                                 value={categoryId}>
-                                <option selected disabled value={null}>Kategori seçiniz</option>
+                                <option selected unselectable value={null}>Kategori seçiniz</option>
                                 {
                                     categories.map((category) => (
                                         <option value={category._id}>{category.name}</option>
@@ -292,7 +292,7 @@ class SaveProductComponent extends Component {
                                 name='subCategoryId'
                                 onChange={this.onChange}
                                 value={subCategoryId}>
-                                <option selected disabled value={null}>Alt kategori seçiniz</option>
+                                <option selected unselectable value={null}>Alt kategori seçiniz</option>
                                 {
                                     categories.find((category) => category._id === categoryId)?.subCategories.map((subCategory) => (
                                         <option value={subCategory._id}>{subCategory.name}</option>
@@ -360,7 +360,7 @@ class SaveProductComponent extends Component {
                                                 onChange={this.onChange}
                                                 value={brand}
                                                 name='brand'>
-                                                <option selected disabled value={null}>Marka seçiniz</option>
+                                                <option selected unselectable value={null}>Marka seçiniz</option>
                                                 {
                                                     categories.find((category) => category._id === categoryId)?.brands.map((brand) => (
                                                         <option value={brand.name}>{brand.name}</option>
@@ -401,7 +401,7 @@ class SaveProductComponent extends Component {
                                         onChange={this.onChange}
                                         value={colorGroup}
                                         placeholder='Renk grubu giriniz (Seçili ürünle aynı renk grubu)'>
-                                        <option selected disabled value={null}>Renk grubu seçebilirsiniz</option>
+                                        <option selected unselectable value={null}>Renk grubu seçebilirsiniz</option>
                                         {
                                             productsWithCategories.find((category) => category._id === categoryId)
                                                 ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
