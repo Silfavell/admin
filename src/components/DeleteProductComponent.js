@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import { IoMdCreate, IoIosClose } from 'react-icons/io'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -9,7 +8,6 @@ class DeleteProductComponent extends Component {
 
     state = {
         productsWithCategories: [],
-
         deleteId: ''
     }
 
@@ -37,16 +35,14 @@ class DeleteProductComponent extends Component {
                     if (status === 200) {
                         alert('Ürün silindi')
 
-                        this.setState({
-                            deleteId: ''
-                        })
+                        this.setState({ deleteId: '' })
                     }
                 }).catch((reason) => {
                     alert(reason.response.data.error)
                 })
 
             }
-        }else{
+        } else {
             alert('Lütfen silmek istediğiniz ürünü seçiniz')
         }
     }
