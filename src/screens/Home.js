@@ -4,6 +4,8 @@ import SaveCategoryComponent from '../components/SaveCategoryComponent'
 import DeleteCategoryComponent from '../components/DeleteCategoryComponent'
 
 import SaveSubCategoryComponent from '../components/SaveSubCategoryComponent'
+import DeleteSubCategoryComponent from '../components/DeleteSubCategoryComponent'
+
 import SaveProductComponent from '../components/SaveProductComponent'
 import UpdateProductComponent from '../components/UpdateProductComponent'
 import DeleteProductComponent from '../components/DeleteProductComponent'
@@ -18,6 +20,7 @@ class Home extends Component {
             case 0: return <SaveCategoryComponent />
             case 2: return <DeleteCategoryComponent />
             case 3: return <SaveSubCategoryComponent />
+            case 5: return <DeleteSubCategoryComponent />
             case 6: return <SaveProductComponent />
             case 7: return <UpdateProductComponent />
             case 8: return <DeleteProductComponent />

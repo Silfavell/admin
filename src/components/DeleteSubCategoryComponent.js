@@ -4,15 +4,16 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
 
-class DeleteCategoryComponent extends Component {
+class DeleteSubCategoryComponent extends Component {
 
     state = {
         categories: [],
-        categoryId: ''
+        categoryId: '',
+        subCategoryId: ''
     }
 
     getCategories = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data }) => data)
     )
 
     UNSAFE_componentWillMount() {
@@ -24,32 +25,33 @@ class DeleteCategoryComponent extends Component {
     onChange = (event) => {
         const { name, value } = event.target
 
-        this.setState({ categoryId: value })
+        this.setState({ [name]: value })
     }
 
 
     onDeleteClick = () => {
-        if (this.state.categoryId.length > 0) {
-            if (window.confirm(`Seçili kategoriyi silmek istediğinize emin misiniz?`)) {
-                axios.delete(`${process.env.REACT_APP_API_URL}/admin/category/${this.state.categoryId}`).then(({ status }) => {
+        if (this.state.categoryId.length > 0 && this.state.subCategoryId.length > 0) {
+            if (window.confirm(`Seçili alt kategoriyi silmek istediğinize emin misiniz?`)) {
+                axios.delete(`${process.env.REACT_APP_API_URL}/admin/sub-category?parentCategoryId=${this.state.categoryId}&_id=${this.state.subCategoryId}`).then(({ status }) => {
                     if (status === 200) {
-                        alert('Kategori silindi')
+                        alert('Alt kategori silindi')
 
-                        this.setState({ categoryId: '' })
+                        this.setState({ categoryId: '', subCategoryId: '' })
                     }
                 }).catch((reason) => {
                     alert(reason.response.data.error)
                 })
             }
         } else {
-            alert('Lütfen silmek istediğiniz kategoriyi seçiniz')
+            alert('Lütfen silmek istediğiniz alt kategoriyi seçiniz')
         }
     }
 
     render() {
         const {
             categories,
-            categoryId
+            categoryId,
+            subCategoryId
         } = this.state
 
         return (
@@ -75,6 +77,26 @@ class DeleteCategoryComponent extends Component {
                         </div>
                     </div>
 
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='subCategoryId' className='text-black'>Silmek istediğiniz alt kategoriyi seçiniz  <span className='text-danger'>*</span></label>
+                            <select
+                                type='text'
+                                className='form-control'
+                                id='subCategoryId'
+                                name='subCategoryId'
+                                onChange={this.onChange}
+                                value={subCategoryId}>
+                                <option selected unselectable value={null}>Alt kategori seçiniz</option>
+                                {
+                                    categories.find((category) => category._id === categoryId)?.subCategories.map((subCategory) => (
+                                        <option value={subCategory._id}>{subCategory.name}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+                    </div>
+
 
                     <div className='form-group row mt-4'>
                         <div className='col-lg-12'>
@@ -88,4 +110,4 @@ class DeleteCategoryComponent extends Component {
     }
 }
 
-export default DeleteCategoryComponent
+export default DeleteSubCategoryComponent
