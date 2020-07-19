@@ -124,6 +124,19 @@ class SaveProductComponent extends Component {
             }).then(({ status }) => {
                 if (status === 200) {
                     alert('Ürün eklendi')
+
+                    this.setState({
+                        categoryId: '',
+                        subCategoryId: '',
+                        name: '',
+                        price: '',
+                        discountedPrice: '',
+                        brand: '',
+                        colorGroup: '',
+                        colorName: '',
+                        colorCode: '',
+                        images: []
+                    })
                 }
             }).catch((reason) => {
                 alert(reason.response.data.error)

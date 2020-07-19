@@ -146,7 +146,7 @@ class UpdateProductComponent extends Component {
     }
 
     onSaveProductClick = () => {
-        if (window.confirm(`${this.state.name} isimli ürünü eklemek istediğinize emin misiniz?`)) {
+        if (window.confirm(`${this.state.name} isimli ürünü güncellemek istediğinize emin misiniz?`)) {
             const formData = this.getFormData()
 
             axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${this.state.updateId}`, formData, {
@@ -156,6 +156,19 @@ class UpdateProductComponent extends Component {
             }).then(({ status }) => {
                 if (status === 200) {
                     alert('Ürün güncellendi')
+
+                    this.setState({
+                        categoryId: '',
+                        subCategoryId: '',
+                        name: '',
+                        price: '',
+                        discountedPrice: '',
+                        brand: '',
+                        colorGroup: '',
+                        colorName: '',
+                        colorCode: '',
+                        images: []
+                    })
                 }
             }).catch((reason) => {
                 alert(reason.response.data.error)
