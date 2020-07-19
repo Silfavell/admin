@@ -143,7 +143,7 @@ class SaveProductComponent extends Component {
                     })
                 }
             }).catch((reason) => {
-                alert(reason.response.data.error)
+                alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu')
             })
         }
     }
@@ -332,7 +332,7 @@ class SaveProductComponent extends Component {
                                             productsWithCategories.find((category) => category._id === categoryId)
                                                 ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
                                                 ?.products.map((product) => (
-                                                    product.colorGroup && <option value={product._id}>{product.name}</option>
+                                                    product.colorGroup && <option value={product.colorGroup}>{product.name}</option>
                                                 ))
                                         }
                                     </select>

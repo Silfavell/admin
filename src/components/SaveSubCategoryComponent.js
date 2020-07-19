@@ -25,7 +25,7 @@ class SaveSubCategoryComponent extends Component {
                     alert('Alt kategori eklendi')
                 }
             }).catch((reason) => {
-                alert(reason.response.data.error)
+                alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
             })
         }
     }

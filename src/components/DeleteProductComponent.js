@@ -38,7 +38,7 @@ class DeleteProductComponent extends Component {
                         this.setState({ deleteId: '' })
                     }
                 }).catch((reason) => {
-                    alert(reason.response.data.error)
+                    alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
                 })
 
             }

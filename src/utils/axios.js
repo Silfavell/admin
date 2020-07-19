@@ -11,8 +11,8 @@ export default () => {
         //    cancel = c
         //})
 
-        if (cookies.get('token')) {
-            config.headers.Authorization = cookies.get('token')
+        if (cookies.get('admin-token')) {
+            config.headers.Authorization = cookies.get('admin-token')
         }
 
         return config

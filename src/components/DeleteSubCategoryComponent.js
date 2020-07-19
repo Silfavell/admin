@@ -39,7 +39,7 @@ class DeleteSubCategoryComponent extends Component {
                         this.setState({ categoryId: '', subCategoryId: '' })
                     }
                 }).catch((reason) => {
-                    alert(reason.response.data.error)
+                    alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
                 })
             }
         } else {

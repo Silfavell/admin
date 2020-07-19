@@ -51,7 +51,7 @@ class Home extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        if (!cookies.get('token')) {
+        if (!cookies.get('admin-token')) {
             this.props.history.push('/login')
         }
     }

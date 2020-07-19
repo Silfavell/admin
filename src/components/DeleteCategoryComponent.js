@@ -38,7 +38,7 @@ class DeleteCategoryComponent extends Component {
                         this.setState({ categoryId: '' })
                     }
                 }).catch((reason) => {
-                    alert(reason.response.data.error)
+                    alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
                 })
             }
         } else {

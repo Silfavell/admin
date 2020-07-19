@@ -19,7 +19,7 @@ class Login extends Component {
     onLoginClick = () => {
         axios.get(`${process.env.REACT_APP_API_URL}/admin/test`, { headers: { Authorization: this.state.token } }).then(({ status, data }) => {
             if (status === 200) {
-                cookies.set('token', this.state.token)
+                cookies.set('admin-token', this.state.token)
                 this.props.history.push('/')
             }
         }).catch(() => {
