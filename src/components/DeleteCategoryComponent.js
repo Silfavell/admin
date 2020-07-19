@@ -22,7 +22,7 @@ class DeleteCategoryComponent extends Component {
     }
 
     onChange = (event) => {
-        const { name, value } = event.target
+        const { value } = event.target
 
         this.setState({ categoryId: value })
     }

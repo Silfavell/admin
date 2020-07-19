@@ -34,7 +34,7 @@ class UpdateSubCategoryComponent extends Component {
             if (window.confirm(`Seçili alt kategoriyi güncellemek istediğinize emin misiniz?`)) {
                 axios.put(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
                     parentCategoryId: this.state.categoryId,
-                    categoryId: this.state.subCategoryId,
+                    subCategoryId: this.state.subCategoryId,
                     name: this.state.name
                 }).then(({ status }) => {
                     if (status === 200) {
@@ -99,6 +99,20 @@ class UpdateSubCategoryComponent extends Component {
                                     ))
                                 }
                             </select>
+                        </div>
+                    </div>
+
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='name' className='text-black'>Alt Kategori Adı <span className='text-danger'>*</span></label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='name'
+                                name='name'
+                                placeholder='Alt Kategori adını giriniz'
+                                onChange={this.onChange}
+                                value={name} />
                         </div>
                     </div>
 
