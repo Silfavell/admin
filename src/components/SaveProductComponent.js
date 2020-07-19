@@ -15,6 +15,7 @@ class SaveProductComponent extends Component {
         categoryId: '',
         subCategoryId: '',
         name: '',
+        details: '',
         price: '',
         discountedPrice: '',
         brand: '',
@@ -83,6 +84,7 @@ class SaveProductComponent extends Component {
             categoryId,
             subCategoryId,
             name,
+            details,
             colorGroup,
             colorName,
             colorCode,
@@ -101,6 +103,7 @@ class SaveProductComponent extends Component {
         categoryId.length > 0 && formData.append('categoryId', categoryId)
         subCategoryId.length > 0 && formData.append('subCategoryId', subCategoryId)
         name.length > 0 && formData.append('name', name)
+        details.length > 0 && formData.append('details', details)
         colorGroup.length > 0 && formData.append('colorGroup', colorGroup)
         colorName.length > 0 && colorCode.length > 0 && formData.append('color', JSON.stringify({
             name: colorName,
@@ -129,6 +132,7 @@ class SaveProductComponent extends Component {
                         categoryId: '',
                         subCategoryId: '',
                         name: '',
+                        details: '',
                         price: '',
                         discountedPrice: '',
                         brand: '',
@@ -174,6 +178,7 @@ class SaveProductComponent extends Component {
             categoryId,
             subCategoryId,
             name,
+            details,
             brand,
             price,
             discountedPrice,
@@ -366,6 +371,20 @@ class SaveProductComponent extends Component {
                                 onChange={this.onChange}
                                 value={colorCode}
                                 placeholder='Renk kodu giriniz' />
+                        </div>
+                    </div>
+
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='details' className='text-black'>Ürün detayı</label>
+                            <textarea
+                                type='text'
+                                className='form-control'
+                                id='details'
+                                name='details'
+                                placeholder='Ürün detayını giriniz'
+                                onChange={this.onChange}
+                                value={details} />
                         </div>
                     </div>
 
