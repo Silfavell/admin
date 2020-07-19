@@ -36,9 +36,9 @@ class UpdateProductComponent extends Component {
     )
 
     getImage = (imagePath, index) => {
-        return axios.get(`http://localhost:3000/static?folder=products&image=${imagePath}-${index}.webp`, { responseType: 'blob' }).then(({ data }) => {
+        return axios.get(`${process.env.REACT_APP_API_URL}/static?folder=products&image=${imagePath}-${index}.webp`, { responseType: 'blob' }).then(({ data }) => {
             return data
-        })
+        }).catch(() => null)
     }
 
     UNSAFE_componentWillMount() {
@@ -49,6 +49,20 @@ class UpdateProductComponent extends Component {
 
     onChange = (event) => {
         const { name, value } = event.target
+
+        const obj = name === 'updateId' ? {
+            categoryId: '',
+            subCategoryId: '',
+            name: '',
+            details: '',
+            price: '',
+            discountedPrice: '',
+            brand: '',
+            colorGroup: '',
+            colorName: '',
+            colorCode: '',
+            images: []
+        } : {}
 
         const categoryObj = name === 'categoryId' ? {
             brand: '',
@@ -78,19 +92,34 @@ class UpdateProductComponent extends Component {
             })
         })
 
-        const imageRequests = Array.from(new Array(productObj.imageCount)).map((_, index) => {
-            return this.getImage(productObj.image, index)
-        })
+        if (name === 'updateId') {
+            const imageRequests = Array.from(new Array(productObj.imageCount)).map((_, index) => {
+                try {
+                    return this.getImage(productObj.image, index)
+                } catch (error) {
+                    return false
+                }
+            })
 
-        Promise.all(imageRequests).then((images) => {
+            Promise.all(imageRequests).then((images) => {
+                this.setState({
+                    [name]: value,
+                    images: images.filter((_) => !!_),
+                    ...obj,
+                    ...categoryObj,
+                    ...productObj,
+                    ...colorGroupObj
+                })
+            })
+        } else {
             this.setState({
                 [name]: value,
-                images,
+                ...obj,
                 ...categoryObj,
                 ...productObj,
                 ...colorGroupObj
             })
-        })
+        }
 
     }
 
@@ -136,8 +165,8 @@ class UpdateProductComponent extends Component {
         subCategoryId.length > 0 && formData.append('subCategoryId', subCategoryId)
         name.length > 0 && formData.append('name', name)
         details.length > 0 && formData.append('details', details)
-        colorGroup.length > 0 && formData.append('colorGroup', colorGroup)
-        colorName.length > 0 && colorCode.length > 0 && formData.append('color', JSON.stringify({
+        colorGroup?.length > 0 && formData.append('colorGroup', colorGroup)
+        colorName?.length > 0 && colorCode?.length > 0 && formData.append('color', JSON.stringify({
             name: colorName,
             code: colorCode
         }))
