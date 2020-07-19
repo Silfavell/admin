@@ -260,7 +260,6 @@ class SaveProductComponent extends Component {
                                     <IoIosClose size={24} />
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -450,7 +449,7 @@ class SaveProductComponent extends Component {
 
                     <div className='d-flex direction-column' style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
 
-                        <div className='col-md-12 preview mb-4'>
+                        <div className='preview mb-4' style={{ position: 'relative', height: 240, width: 240 }}>
                             <label
                                 id='image-label'
                                 htmlFor='image'
@@ -467,7 +466,7 @@ class SaveProductComponent extends Component {
 
                         {
                             images.map((image, index) => (
-                                <div className='col-md-12 preview ml-4 mb-4' style={{ position: 'relative' }}>
+                                <div className='preview ml-4 mb-4' style={{ position: 'relative', height: 240, width: 240 }}>
                                     <div
                                         onClick={() => this.onRemoveImageClick(index)}
                                         style={{ position: 'absolute', top: 10, right: 10, padding: 5, cursor: 'pointer', backgroundColor: 'red' }}>
