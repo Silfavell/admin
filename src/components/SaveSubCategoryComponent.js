@@ -48,7 +48,7 @@ class SaveSubCategoryComponent extends Component {
         } = this.state
 
         return (
-            <div className='p-3 mt-4 border'>
+            <div className='p-3 border'>
                 <div className='form-group'>
                     <div className='col-md-12'>
                         <label htmlFor='parentCategory' className='text-black'>Üst kategori <span className='text-danger'>*</span></label>

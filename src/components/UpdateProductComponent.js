@@ -5,12 +5,14 @@ import { IoMdCreate, IoIosClose } from 'react-icons/io'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
 
-class SaveProductComponent extends Component {
+class UpdateProductComponent extends Component {
 
     state = {
         categories: [],
         productsWithCategories: [],
         brandMode: 0,
+
+        updateId: '',
 
         categoryId: '',
         subCategoryId: '',
@@ -57,10 +59,36 @@ class SaveProductComponent extends Component {
             colorCode: ''
         } : {}
 
-        this.setState({
-            [name]: value,
-            ...categoryObj,
-            ...colorGroupObj
+        let productObj = {}
+
+        // eslint-disable-next-line
+        this.state.productsWithCategories.map((category) => {
+            // eslint-disable-next-line
+            category.subCategories.map((subCategory) => {
+                // eslint-disable-next-line
+                subCategory.products.map((product) => {
+                    if (product._id === value) {
+                        productObj = product
+                        product.colorGroup = product.color ? product.colorGroup : null
+                        productObj.colorCode = product.color?.code ?? null
+                        productObj.colorName = product.color?.name ?? null
+                    }
+                })
+            })
+        })
+
+        const imageRequests = Array.from(new Array(productObj.imageCount)).map((_, index) => {
+            return this.getImage(productObj.image, index)
+        })
+
+        Promise.all(imageRequests).then((images) => {
+            this.setState({
+                [name]: value,
+                images,
+                ...categoryObj,
+                ...productObj,
+                ...colorGroupObj
+            })
         })
 
     }
@@ -71,6 +99,10 @@ class SaveProductComponent extends Component {
 
     onRemoveColorGroupClick = () => {
         this.setState({ colorGroup: '' })
+    }
+
+    onRemoveUpdateIdClick = () => {
+        this.setState({ updateId: '' })
     }
 
     onRemoveImageClick = (index) => {
@@ -117,17 +149,18 @@ class SaveProductComponent extends Component {
         if (window.confirm(`${this.state.name} isimli ürünü eklemek istediğinize emin misiniz?`)) {
             const formData = this.getFormData()
 
-            axios.post(`${process.env.REACT_APP_API_URL}/admin/product`, formData, {
+            axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${this.state.updateId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             }).then(({ status }) => {
                 if (status === 200) {
-                    alert('Ürün eklendi')
+                    alert('Ürün güncellendi')
                 }
             }).catch((reason) => {
                 alert(reason.response.data.error)
             })
+
         }
     }
 
@@ -153,6 +186,7 @@ class SaveProductComponent extends Component {
 
     render() {
         const {
+            updateId,
             categories,
             productsWithCategories,
             brandMode,
@@ -172,6 +206,43 @@ class SaveProductComponent extends Component {
         return (
             <div className='p-3 border'>
                 <div className='col-md-12'>
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='updateId' className='text-black'>Düzenlemek istediğiniz ürünü seçiniz  <span className='text-danger'>*</span></label>
+
+                            <div className='d-flex'>
+
+                                <div style={{ flex: 1 }}>
+                                    <select
+                                        type='text'
+                                        className='form-control'
+                                        id='updateId'
+                                        name='updateId'
+                                        onChange={this.onChange}
+                                        value={updateId}>
+                                        <option selected unselectable value={null}>Düzenlemek istediğiniz ürünü seçiniz</option>
+                                        {
+                                            productsWithCategories.map((category) => {
+                                                return category.subCategories.map((subCategory) => {
+                                                    return subCategory.products.map((product) => (
+                                                        <option value={product._id}>{product.name}</option>
+                                                    ))
+                                                })
+                                            })
+                                        }
+                                    </select>
+                                </div>
+
+                                <div
+                                    className={'ml-2 px-3 border d-flex align-items-center justify-content-center'}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={this.onRemoveUpdateIdClick}>
+                                    <IoIosClose size={24} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div className='form-group row'>
 
                         <div className='col-md-6'>
@@ -387,10 +458,9 @@ class SaveProductComponent extends Component {
                         }
                     </div>
 
-
                     <div className='form-group row mt-4'>
                         <div className='col-lg-12'>
-                            <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü ekle</button>
+                            <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü güncelle</button>
                         </div>
                     </div>
 
@@ -400,4 +470,4 @@ class SaveProductComponent extends Component {
     }
 }
 
-export default SaveProductComponent
+export default UpdateProductComponent
