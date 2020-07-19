@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 
 import SaveCategoryComponent from '../components/SaveCategoryComponent'
+import UpdateCategoryComponent from '../components/UpdateCategoryComponent'
 import DeleteCategoryComponent from '../components/DeleteCategoryComponent'
 
 import SaveSubCategoryComponent from '../components/SaveSubCategoryComponent'
+import UpdateSubCategoryComponent from '../components/UpdateSubCategoryComponent'
 import DeleteSubCategoryComponent from '../components/DeleteSubCategoryComponent'
 
 import SaveProductComponent from '../components/SaveProductComponent'
@@ -18,8 +20,10 @@ class Home extends Component {
     getForm = (status) => {
         switch (status) {
             case 0: return <SaveCategoryComponent />
+            case 1: return <UpdateCategoryComponent />
             case 2: return <DeleteCategoryComponent />
             case 3: return <SaveSubCategoryComponent />
+            case 4: return <UpdateSubCategoryComponent />
             case 5: return <DeleteSubCategoryComponent />
             case 6: return <SaveProductComponent />
             case 7: return <UpdateProductComponent />

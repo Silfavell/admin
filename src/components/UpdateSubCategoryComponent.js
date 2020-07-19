@@ -4,12 +4,12 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
 
-class DeleteSubCategoryComponent extends Component {
-
+class UpdateSubCategoryComponent extends Component {
     state = {
         categories: [],
         categoryId: '',
-        subCategoryId: ''
+        subCategoryId: '',
+        name: ''
     }
 
     getCategories = () => (
@@ -29,21 +29,25 @@ class DeleteSubCategoryComponent extends Component {
     }
 
 
-    onDeleteClick = () => {
-        if (this.state.categoryId.length > 0 && this.state.subCategoryId.length > 0) {
-            if (window.confirm(`Seçili alt kategoriyi silmek istediğinize emin misiniz?`)) {
-                axios.delete(`${process.env.REACT_APP_API_URL}/admin/sub-category?parentCategoryId=${this.state.categoryId}&_id=${this.state.subCategoryId}`).then(({ status }) => {
+    onUpdateClick = () => {
+        if (this.state.categoryId.length > 0 && this.state.subCategoryId.length > 0 && this.state.name.length > 0) {
+            if (window.confirm(`Seçili alt kategoriyi güncellemek istediğinize emin misiniz?`)) {
+                axios.put(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
+                    parentCategoryId: this.state.categoryId,
+                    categoryId: this.state.subCategoryId,
+                    name: this.state.name
+                }).then(({ status }) => {
                     if (status === 200) {
-                        alert('Alt kategori silindi')
+                        alert('Alt kategori güncellendi')
 
-                        this.setState({ categoryId: '', subCategoryId: '' })
+                        this.setState({ categoryId: '', subCategoryId: '', name: '' })
                     }
                 }).catch((reason) => {
                     alert(reason.response.data.error)
                 })
             }
         } else {
-            alert('Lütfen silmek istediğiniz alt kategoriyi seçiniz')
+            alert('Lütfen gerekli alanları doldurunuz')
         }
     }
 
@@ -51,7 +55,8 @@ class DeleteSubCategoryComponent extends Component {
         const {
             categories,
             categoryId,
-            subCategoryId
+            subCategoryId,
+            name
         } = this.state
 
         return (
@@ -100,7 +105,7 @@ class DeleteSubCategoryComponent extends Component {
 
                     <div className='form-group row mt-4'>
                         <div className='col-lg-12'>
-                            <button className='btn btn-primary btn-block' onClick={this.onDeleteClick}>Alt Kategoriyi Sil</button>
+                            <button className='btn btn-primary btn-block' onClick={this.onUpdateClick}>Alt Kategoriyi güncelle</button>
                         </div>
                     </div>
 
@@ -110,4 +115,4 @@ class DeleteSubCategoryComponent extends Component {
     }
 }
 
-export default DeleteSubCategoryComponent
+export default UpdateSubCategoryComponent
