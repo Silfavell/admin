@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Cookies from 'universal-cookie'
 
 import SaveCategoryComponent from '../components/SaveCategoryComponent'
 import UpdateCategoryComponent from '../components/UpdateCategoryComponent'
@@ -11,6 +12,8 @@ import DeleteSubCategoryComponent from '../components/DeleteSubCategoryComponent
 import SaveProductComponent from '../components/SaveProductComponent'
 import UpdateProductComponent from '../components/UpdateProductComponent'
 import DeleteProductComponent from '../components/DeleteProductComponent'
+
+const cookies = new Cookies()
 
 class Home extends Component {
     state = {
@@ -44,6 +47,12 @@ class Home extends Component {
             case 'update-product': this.setState({ status: 7 }); break;
             case 'delete-product': this.setState({ status: 8 }); break;
             default: break;
+        }
+    }
+
+    UNSAFE_componentWillMount() {
+        if (!cookies.get('token')) {
+            this.props.history.push('/login')
         }
     }
 
