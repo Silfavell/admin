@@ -1,6 +1,9 @@
 /* eslint-disable */
 import axios from 'axios'
 import Cookies from 'universal-cookie'
+import VanillaToasts from 'vanillatoasts'
+
+import 'vanillatoasts/vanillatoasts.css'
 
 const cookies = new Cookies()
 
@@ -27,7 +30,6 @@ export default () => {
                 VanillaToasts.create({
                     title: error?.response?.data?.error ?? 'Beklenmedik bir hata oluştu, lütfen daha sonra tekrar deneyiniz',
                     positionClass: 'topRight',
-                    type: 'success',
                     timeout: 5 * 1000
                 })
 

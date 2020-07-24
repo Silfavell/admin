@@ -203,8 +203,6 @@ class UpdateProductComponent extends Component {
                         images: []
                     })
                 }
-            }).catch((reason) => {
-                alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
             })
 
         }

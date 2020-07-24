@@ -142,8 +142,6 @@ class SaveProductComponent extends Component {
                         images: []
                     })
                 }
-            }).catch((reason) => {
-                alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu')
             })
         }
     }
