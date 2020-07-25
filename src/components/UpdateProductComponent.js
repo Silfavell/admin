@@ -248,8 +248,6 @@ class UpdateProductComponent extends Component {
             colorCode
         } = this.state
 
-        console.log('-->', images)
-
         return (
             <div className='p-3 border'>
                 <div className='col-md-12'>
