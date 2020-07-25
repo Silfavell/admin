@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { IoMdCreate, IoIosClose } from 'react-icons/io'
 
+import DnD from '../screens/DnD'
+
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
 
@@ -77,6 +79,10 @@ class SaveProductComponent extends Component {
     onRemoveImageClick = (index) => {
         this.state.images.splice(index, 1)
         this.setState({ images: this.state.images })
+    }
+
+    setImages = (images) => {
+        this.setState({ images })
     }
 
     getFormData = () => {
@@ -386,36 +392,12 @@ class SaveProductComponent extends Component {
                         </div>
                     </div>
 
-                    <div className='d-flex direction-column' style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
-
-                        <div className='preview mb-4' style={{ position: 'relative', height: 240, minHeight: 240, width: 240, minWidth: 240 }}>
-                            <label
-                                id='image-label'
-                                htmlFor='image'
-                                onChange={this.handleFileChange}
-                                className='text-black'>Ürün Resimi <span className='text-danger'>*</span>
-                            </label>
-                            <input
-                                id='image'
-                                type='file'
-                                accept='image/*'
-                                onChange={this.handleFileChange}
-                            />
-                        </div>
-
-                        {
-                            images.map((image, index) => (
-                                <div className='preview ml-4 mb-4' style={{ position: 'relative', height: 240, minHeight: 240, width: 240, minWidth: 240 }}>
-                                    <div
-                                        onClick={() => this.onRemoveImageClick(index)}
-                                        style={{ position: 'absolute', top: 10, right: 10, padding: 5, cursor: 'pointer', backgroundColor: 'red' }}>
-                                        <IoIosClose size={24} />
-                                    </div>
-                                    <img style={{ width: '100%', height: '100%' }} alt='' ref={ref => this.getImageData(ref, image)} />
-                                </div>
-                            ))
-                        }
-                    </div>
+                    <DnD
+                        images={images}
+                        handleFileChange={this.handleFileChange}
+                        onRemoveImageClick={this.onRemoveImageClick}
+                        setImages={this.setImages}
+                    />
 
 
                     <div className='form-group row mt-4'>
