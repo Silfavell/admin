@@ -248,8 +248,17 @@ class UpdateProductComponent extends Component {
                         discountedPrice: '',
                         brand: '',
                         colorGroup: '',
+
                         colorName: '',
                         colorCode: '',
+
+                        form: '',
+                        benefit: '',
+                        colorDetail: '',
+                        kind: '',
+                        brushThickness: '',
+                        feature: '',
+
                         images: []
                     })
                 }
