@@ -388,7 +388,7 @@ class SaveProductComponent extends Component {
 
                     <div className='d-flex direction-column' style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
 
-                        <div className='preview mb-4' style={{ position: 'relative', height: 240, width: 240 }}>
+                        <div className='preview mb-4' style={{ position: 'relative', height: 240, minHeight: 240, width: 240, minWidth: 240 }}>
                             <label
                                 id='image-label'
                                 htmlFor='image'
@@ -405,7 +405,7 @@ class SaveProductComponent extends Component {
 
                         {
                             images.map((image, index) => (
-                                <div className='preview ml-4 mb-4' style={{ position: 'relative', height: 240, width: 240 }}>
+                                <div className='preview ml-4 mb-4' style={{ position: 'relative', height: 240, minHeight: 240, width: 240, minWidth: 240 }}>
                                     <div
                                         onClick={() => this.onRemoveImageClick(index)}
                                         style={{ position: 'absolute', top: 10, right: 10, padding: 5, cursor: 'pointer', backgroundColor: 'red' }}>
