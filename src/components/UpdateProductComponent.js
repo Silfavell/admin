@@ -24,8 +24,17 @@ class UpdateProductComponent extends Component {
         discountedPrice: '',
         brand: '',
         colorGroup: '',
+
         colorName: '',
         colorCode: '',
+
+        form: '',
+        benefit: '',
+        colorDetail: '',
+        kind: '',
+        brushThickness: '',
+        feature: '',
+
         images: []
     }
 
@@ -61,13 +70,21 @@ class UpdateProductComponent extends Component {
             discountedPrice: '',
             brand: '',
             colorGroup: '',
+
             colorName: '',
             colorCode: '',
+
+            form: '',
+            benefit: '',
+            colorDetail: '',
+            kind: '',
+            brushThickness: '',
+            feature: '',
+
             images: []
         } : {}
 
         const categoryObj = name === 'categoryId' ? {
-            brand: '',
             subCategoryId: ''
         } : {}
 
@@ -89,6 +106,13 @@ class UpdateProductComponent extends Component {
                         product.colorGroup = product.color ? product.colorGroup : null
                         productObj.colorCode = product.color?.code ?? null
                         productObj.colorName = product.color?.name ?? null
+
+                        productObj.form = product.specifications?.form ?? null
+                        productObj.benefit = product.specifications?.benefit ?? null
+                        productObj.colorDetail = product.specifications?.colorDetail ?? null
+                        productObj.kind = product.specifications?.kind ?? null
+                        productObj.brushThickness = product.specifications?.brushThickness ?? null
+                        productObj.feature = product.specifications?.feature ?? null
                     }
                 })
             })
@@ -110,7 +134,7 @@ class UpdateProductComponent extends Component {
                     ...categoryObj,
                     ...productObj,
                     ...colorGroupObj,
-                    images: images.filter((_) => !!_),
+                    images: images.filter((_) => !!_)
                 })
             })
         } else {
@@ -153,8 +177,17 @@ class UpdateProductComponent extends Component {
             name,
             details,
             colorGroup,
+
             colorName,
             colorCode,
+
+            form,
+            benefit,
+            colorDetail,
+            kind,
+            brushThickness,
+            feature,
+
             brand,
             price,
             discountedPrice,
@@ -167,18 +200,29 @@ class UpdateProductComponent extends Component {
             formData.append('image-' + index, image)
         })
 
-        categoryId.length > 0 && formData.append('categoryId', categoryId)
-        subCategoryId.length > 0 && formData.append('subCategoryId', subCategoryId)
-        name.length > 0 && formData.append('name', name)
-        details.length > 0 && formData.append('details', details)
-        colorGroup?.length > 0 && formData.append('colorGroup', colorGroup)
-        colorName?.length > 0 && colorCode?.length > 0 && formData.append('color', JSON.stringify({
+        const specifications = {}
+
+        if (form.length > 0) specifications.form = form
+        if (benefit.length > 0) specifications.benefit = benefit
+        if (colorDetail.length > 0) specifications.colorDetail = colorDetail
+        if (kind.length > 0) specifications.kind = kind
+        if (brushThickness.length > 0) specifications.brushThickness = brushThickness
+        if (feature.length > 0) specifications.feature = feature
+
+
+        if (categoryId.length > 0) formData.append('categoryId', categoryId)
+        if (subCategoryId.length > 0) formData.append('subCategoryId', subCategoryId)
+        if (name.length > 0) formData.append('name', name)
+        if (details.length > 0) formData.append('details', details)
+        if (colorGroup?.length > 0) formData.append('colorGroup', colorGroup)
+        if (colorName?.length > 0 && colorCode?.length > 0) formData.append('color', JSON.stringify({
             name: colorName,
             code: colorCode
         }))
-        brand.length > 0 && formData.append('brand', brand)
-        price.length > 0 && formData.append('price', price)
-        discountedPrice.length > 0 && formData.append('discountedPrice', discountedPrice)
+        if (Object.keys(specifications).length > 0) formData.append('specifications', JSON.stringify(specifications))
+        if (brand.length > 0) formData.append('brand', brand)
+        if (price.length > 0) formData.append('price', price)
+        if (discountedPrice.length > 0) formData.append('discountedPrice', discountedPrice)
 
         return formData
     }
@@ -250,10 +294,18 @@ class UpdateProductComponent extends Component {
             price,
             discountedPrice,
             colorGroup,
+
             colorName,
-            colorCode
+            colorCode,
+
+            form,
+            benefit,
+            colorDetail,
+            kind,
+            brushThickness,
+            feature
         } = this.state
-        
+
         return (
             <div className='p-3 border'>
                 <div className='col-md-12'>
@@ -478,6 +530,77 @@ class UpdateProductComponent extends Component {
                         </div>
                     </div>
 
+                    <div className='form-group row'>
+                        <div className='col-md-4'>
+                            <label htmlFor='form' className='text-black'>Form</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='form'
+                                name='form'
+                                onChange={this.onChange}
+                                value={form}
+                                placeholder='Form giriniz' />
+                        </div>
+                        <div className='col-md-4'>
+                            <label htmlFor='benefit' className='text-black'>İhtiyaç/Yarar</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='benefit'
+                                name='benefit'
+                                onChange={this.onChange}
+                                value={benefit}
+                                placeholder='İhtiyaç/Yarar giriniz' />
+                        </div>
+                        <div className='col-md-4'>
+                            <label htmlFor='colorDetail' className='text-black'>Bitiş</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='colorDetail'
+                                name='colorDetail'
+                                onChange={this.onChange}
+                                value={colorDetail}
+                                placeholder='Bitiş giriniz' />
+                        </div>
+                    </div>
+
+                    <div className='form-group row'>
+                        <div className='col-md-4'>
+                            <label htmlFor='brushThickness' className='text-black'>Fırça Kalınlığı</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='brushThickness'
+                                name='brushThickness'
+                                onChange={this.onChange}
+                                value={brushThickness}
+                                placeholder='Fırça Kalınlığı giriniz' />
+                        </div>
+                        <div className='col-md-4'>
+                            <label htmlFor='kind' className='text-black'>Çeşit</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='kind'
+                                name='kind'
+                                onChange={this.onChange}
+                                value={kind}
+                                placeholder='Çeşit giriniz' />
+                        </div>
+                        <div className='col-md-4'>
+                            <label htmlFor='feature' className='text-black'>Özellik</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='feature'
+                                name='feature'
+                                onChange={this.onChange}
+                                value={feature}
+                                placeholder='Özellik giriniz' />
+                        </div>
+                    </div>
 
                     <div className='form-group row'>
                         <div className='col-md-12'>
