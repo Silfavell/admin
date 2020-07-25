@@ -104,11 +104,11 @@ class UpdateProductComponent extends Component {
             Promise.all(imageRequests).then((images) => {
                 this.setState({
                     [name]: value,
-                    images: images.filter((_) => !!_),
                     ...obj,
                     ...categoryObj,
                     ...productObj,
-                    ...colorGroupObj
+                    ...colorGroupObj,
+                    images: images.filter((_) => !!_),
                 })
             })
         } else {
@@ -248,6 +248,8 @@ class UpdateProductComponent extends Component {
             colorCode
         } = this.state
 
+        console.log('-->', images)
+
         return (
             <div className='p-3 border'>
                 <div className='col-md-12'>
@@ -270,7 +272,7 @@ class UpdateProductComponent extends Component {
                                             productsWithCategories.map((category) => {
                                                 return category.subCategories.map((subCategory) => {
                                                     return subCategory.products.map((product) => (
-                                                        <option value={product._id}>{product.name}</option>
+                                                        <option key={product._id} value={product._id}>{product.name}</option>
                                                     ))
                                                 })
                                             })
@@ -301,7 +303,7 @@ class UpdateProductComponent extends Component {
                                 <option selected unselectable value={null}>Kategori seçiniz</option>
                                 {
                                     categories.map((category) => (
-                                        <option value={category._id}>{category.name}</option>
+                                        <option key={category._id} value={category._id}>{category.name}</option>
                                     ))
                                 }
                             </select>
@@ -489,7 +491,7 @@ class UpdateProductComponent extends Component {
 
                     <div className='d-flex direction-column' style={{ overflowX: 'scroll', overflowY: 'hidden' }}>
 
-                        <div className='preview mb-4' style={{ position: 'relative', height: 240, width: 240 }}>
+                        <div className='preview mb-4' style={{ position: 'relative', height: 240, minHeight: 240, width: 240, minWidth: 240 }}>
                             <label
                                 id='image-label'
                                 htmlFor='image'
@@ -506,7 +508,7 @@ class UpdateProductComponent extends Component {
 
                         {
                             images.map((image, index) => (
-                                <div className='preview ml-4 mb-4' style={{ position: 'relative', height: 240, width: 240 }}>
+                                <div className='preview ml-4 mb-4' style={{ position: 'relative', height: 240, minHeight: 240, width: 240, minWidth: 240 }}>
                                     <div
                                         onClick={() => this.onRemoveImageClick(index)}
                                         style={{ position: 'absolute', top: 10, right: 10, padding: 5, cursor: 'pointer', backgroundColor: 'red' }}>
