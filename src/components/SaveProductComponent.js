@@ -21,6 +21,7 @@ class SaveProductComponent extends Component {
         price: '',
         discountedPrice: '',
         brand: '',
+        purchasable: true,
         colorGroup: '',
 
         colorName: '',
@@ -57,7 +58,10 @@ class SaveProductComponent extends Component {
     }
 
     onChange = (event) => {
-        const { name, value } = event.target
+        let { name, value, checked } = event.target
+
+        if (name === 'purchasable')
+            value = checked
 
         const categoryObj = name === 'categoryId' ? {
             subCategoryId: ''
@@ -114,6 +118,7 @@ class SaveProductComponent extends Component {
             brand,
             price,
             discountedPrice,
+            purchasable,
             images
         } = this.state
 
@@ -148,6 +153,7 @@ class SaveProductComponent extends Component {
         if (brand.length > 0) formData.append('brand', brand)
         if (price.length > 0) formData.append('price', price)
         if (discountedPrice.length > 0) formData.append('discountedPrice', discountedPrice)
+        formData.append('purchasable', purchasable)
 
         return formData
     }
@@ -171,6 +177,7 @@ class SaveProductComponent extends Component {
                         details: '',
                         price: '',
                         discountedPrice: '',
+                        purchasable: true,
                         brand: '',
                         colorGroup: '',
 
@@ -225,6 +232,7 @@ class SaveProductComponent extends Component {
             brand,
             price,
             discountedPrice,
+            purchasable,
             colorGroup,
 
             colorName,
@@ -508,6 +516,17 @@ class SaveProductComponent extends Component {
                                 placeholder='Ürün detayını giriniz'
                                 onChange={this.onChange}
                                 value={details} />
+                        </div>
+                    </div>
+
+                    <div className='form-group row'>
+                        <div className='col-md-8' />
+                        <div className='col-md-4 d-flex align-items-center justify-content-end'>
+                            <label className='text-black'>Ürün Aktifliği</label>
+                            <label className='switch ml-4'>
+                                <input name='purchasable' className='switch-input' type='checkbox' onChange={this.onChange} checked={purchasable} />
+                                <span className='slider round'></span>
+                            </label>
                         </div>
                     </div>
 

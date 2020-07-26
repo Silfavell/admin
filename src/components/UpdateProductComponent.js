@@ -23,6 +23,7 @@ class UpdateProductComponent extends Component {
         price: '',
         discountedPrice: '',
         brand: '',
+        purchasable: true,
         colorGroup: '',
 
         colorName: '',
@@ -59,7 +60,10 @@ class UpdateProductComponent extends Component {
     }
 
     onChange = (event) => {
-        const { name, value } = event.target
+        let { name, value, checked } = event.target
+
+        if (name === 'purchasable')
+            value = checked
 
         const obj = name === 'updateId' ? {
             categoryId: '',
@@ -191,6 +195,7 @@ class UpdateProductComponent extends Component {
             brand,
             price,
             discountedPrice,
+            purchasable,
             images
         } = this.state
 
@@ -223,6 +228,7 @@ class UpdateProductComponent extends Component {
         if (brand.length > 0) formData.append('brand', brand)
         if (price.length > 0) formData.append('price', price)
         if (discountedPrice.length > 0) formData.append('discountedPrice', discountedPrice)
+        formData.append('purchasable', purchasable)
 
         return formData
     }
@@ -240,12 +246,14 @@ class UpdateProductComponent extends Component {
                     alert('Ürün güncellendi')
 
                     this.setState({
+                        updateId: '',
                         categoryId: '',
                         subCategoryId: '',
                         name: '',
                         details: '',
                         price: '',
                         discountedPrice: '',
+                        purchasable: true,
                         brand: '',
                         colorGroup: '',
 
@@ -302,6 +310,7 @@ class UpdateProductComponent extends Component {
             brand,
             price,
             discountedPrice,
+            purchasable,
             colorGroup,
 
             colorName,
@@ -355,289 +364,305 @@ class UpdateProductComponent extends Component {
                         </div>
                     </div>
 
-                    <div className='form-group row'>
+                    {
+                        updateId.length > 0 ? (
+                            <>
+                                <div className='form-group row'>
 
-                        <div className='col-md-6'>
-                            <label htmlFor='categoryId' className='text-black'>Kategori <span className='text-danger'>*</span></label>
-                            <select
-                                className='form-control'
-                                id='categoryId'
-                                name='categoryId'
-                                onChange={this.onChange}
-                                value={categoryId}>
-                                <option selected unselectable value={null}>Kategori seçiniz</option>
-                                {
-                                    categories.map((category) => (
-                                        <option key={category._id} value={category._id}>{category.name}</option>
-                                    ))
-                                }
-                            </select>
-                        </div>
+                                    <div className='col-md-6'>
+                                        <label htmlFor='categoryId' className='text-black'>Kategori <span className='text-danger'>*</span></label>
+                                        <select
+                                            className='form-control'
+                                            id='categoryId'
+                                            name='categoryId'
+                                            onChange={this.onChange}
+                                            value={categoryId}>
+                                            <option selected unselectable value={null}>Kategori seçiniz</option>
+                                            {
+                                                categories.map((category) => (
+                                                    <option key={category._id} value={category._id}>{category.name}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
 
-                        <div className='col-md-6'>
-                            <label htmlFor='subCategoryId' className='text-black'>Alt kategori <span className='text-danger'>*</span></label>
-                            <select
-                                type='text'
-                                className='form-control'
-                                id='subCategoryId'
-                                name='subCategoryId'
-                                onChange={this.onChange}
-                                value={subCategoryId}>
-                                <option selected unselectable value={null}>Alt kategori seçiniz</option>
-                                {
-                                    categories.find((category) => category._id === categoryId)?.subCategories.map((subCategory) => (
-                                        <option value={subCategory._id}>{subCategory.name}</option>
-                                    ))
-                                }
-                            </select>
-                        </div>
+                                    <div className='col-md-6'>
+                                        <label htmlFor='subCategoryId' className='text-black'>Alt kategori <span className='text-danger'>*</span></label>
+                                        <select
+                                            type='text'
+                                            className='form-control'
+                                            id='subCategoryId'
+                                            name='subCategoryId'
+                                            onChange={this.onChange}
+                                            value={subCategoryId}>
+                                            <option selected unselectable value={null}>Alt kategori seçiniz</option>
+                                            {
+                                                categories.find((category) => category._id === categoryId)?.subCategories.map((subCategory) => (
+                                                    <option value={subCategory._id}>{subCategory.name}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
 
-                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-12'>
-                            <label htmlFor='name' className='text-black'>Ad <span className='text-danger'>*</span></label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='name'
-                                name='name'
-                                placeholder='Ürün adını giriniz'
-                                onChange={this.onChange}
-                                value={name} />
-                        </div>
-                    </div>
+                                <div className='form-group row'>
+                                    <div className='col-md-12'>
+                                        <label htmlFor='name' className='text-black'>Ad <span className='text-danger'>*</span></label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='name'
+                                            name='name'
+                                            placeholder='Ürün adını giriniz'
+                                            onChange={this.onChange}
+                                            value={name} />
+                                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-12'>
-                            <label htmlFor='price' className='text-black'>Fiyat <span className='text-danger'>*</span> </label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='price'
-                                name='price'
-                                onChange={this.onChange}
-                                placeholder='Ürün fiyatı giriniz'
-                                value={price} />
-                        </div>
-                    </div>
+                                <div className='form-group row'>
+                                    <div className='col-md-12'>
+                                        <label htmlFor='price' className='text-black'>Fiyat <span className='text-danger'>*</span> </label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='price'
+                                            name='price'
+                                            onChange={this.onChange}
+                                            placeholder='Ürün fiyatı giriniz'
+                                            value={price} />
+                                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-12'>
-                            <label htmlFor='price' className='text-black'>İndirimli Fiyat <span className='text-danger'>*</span> </label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='discountedPrice'
-                                name='discountedPrice'
-                                onChange={this.onChange}
-                                placeholder='İndirimli Ürün fiyatı giriniz'
-                                value={discountedPrice} />
-                        </div>
-                    </div>
+                                <div className='form-group row'>
+                                    <div className='col-md-12'>
+                                        <label htmlFor='price' className='text-black'>İndirimli Fiyat <span className='text-danger'>*</span> </label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='discountedPrice'
+                                            name='discountedPrice'
+                                            onChange={this.onChange}
+                                            placeholder='İndirimli Ürün fiyatı giriniz'
+                                            value={discountedPrice} />
+                                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-12'>
-                            <label htmlFor='brand' className='text-black'>Marka <span className='text-danger'>*</span> </label>
-                            <div className='d-flex'>
+                                <div className='form-group row'>
+                                    <div className='col-md-12'>
+                                        <label htmlFor='brand' className='text-black'>Marka <span className='text-danger'>*</span> </label>
+                                        <div className='d-flex'>
 
-                                <div style={{ flex: 1 }}>
-                                    {
-                                        brandMode === 0 ? (
-                                            <select
-                                                type='text'
-                                                className='form-control'
-                                                id='brand'
-                                                onChange={this.onChange}
-                                                value={brand}
-                                                name='brand'>
-                                                <option selected unselectable value={null}>Marka seçiniz</option>
+                                            <div style={{ flex: 1 }}>
                                                 {
-                                                    categories.find((category) => category._id === categoryId)?.brands.map((brand) => (
-                                                        <option value={brand.name}>{brand.name}</option>
-                                                    ))
+                                                    brandMode === 0 ? (
+                                                        <select
+                                                            type='text'
+                                                            className='form-control'
+                                                            id='brand'
+                                                            onChange={this.onChange}
+                                                            value={brand}
+                                                            name='brand'>
+                                                            <option selected unselectable value={null}>Marka seçiniz</option>
+                                                            {
+                                                                categories.find((category) => category._id === categoryId)?.brands.map((brand) => (
+                                                                    <option value={brand.name}>{brand.name}</option>
+                                                                ))
+                                                            }
+                                                        </select>
+                                                    ) : (
+                                                            <input
+                                                                type='text'
+                                                                className='form-control'
+                                                                id='brand'
+                                                                onChange={this.onChange}
+                                                                value={brand}
+                                                                name='brand' />
+                                                        )
                                                 }
-                                            </select>
-                                        ) : (
-                                                <input
+                                            </div>
+
+                                            <div className={'ml-2 px-3 border d-flex align-items-center justify-content-center'} style={{ cursor: 'pointer' }} onClick={this.changeBrandMode}>
+                                                <IoMdCreate size={24} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className='form-group row'>
+                                    <div className='col-md-12'>
+                                        <label htmlFor='colorGroup' className='text-black'>Renk grubu (Referans ürün)</label>
+
+                                        <div className='d-flex'>
+
+                                            <div style={{ flex: 1 }}>
+                                                <select
                                                     type='text'
                                                     className='form-control'
-                                                    id='brand'
+                                                    id='colorGroup'
+                                                    name='colorGroup'
                                                     onChange={this.onChange}
-                                                    value={brand}
-                                                    name='brand' />
-                                            )
-                                    }
+                                                    value={colorGroup}
+                                                    placeholder='Renk grubu giriniz (Seçili ürünle aynı renk grubu)'>
+                                                    <option selected unselectable value={null}>Renk grubu seçebilirsiniz</option>
+                                                    {
+                                                        productsWithCategories.find((category) => category._id === categoryId)
+                                                            ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
+                                                            ?.products.map((product) => (
+                                                                product.colorGroup && <option value={product._id}>{product.name}</option>
+                                                            ))
+                                                    }
+                                                </select>
+                                            </div>
+
+                                            <div
+                                                className={'ml-2 px-3 border d-flex align-items-center justify-content-center'}
+                                                style={{ cursor: 'pointer' }}
+                                                onClick={this.onRemoveColorGroupClick}>
+                                                <IoIosClose size={24} />
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
 
-                                <div className={'ml-2 px-3 border d-flex align-items-center justify-content-center'} style={{ cursor: 'pointer' }} onClick={this.changeBrandMode}>
-                                    <IoMdCreate size={24} />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='form-group row'>
-                        <div className='col-md-12'>
-                            <label htmlFor='colorGroup' className='text-black'>Renk grubu (Referans ürün)</label>
-
-                            <div className='d-flex'>
-
-                                <div style={{ flex: 1 }}>
-                                    <select
-                                        type='text'
-                                        className='form-control'
-                                        id='colorGroup'
-                                        name='colorGroup'
-                                        onChange={this.onChange}
-                                        value={colorGroup}
-                                        placeholder='Renk grubu giriniz (Seçili ürünle aynı renk grubu)'>
-                                        <option selected unselectable value={null}>Renk grubu seçebilirsiniz</option>
-                                        {
-                                            productsWithCategories.find((category) => category._id === categoryId)
-                                                ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
-                                                ?.products.map((product) => (
-                                                    product.colorGroup && <option value={product._id}>{product.name}</option>
-                                                ))
-                                        }
-                                    </select>
+                                <div className='form-group row'>
+                                    <div className='col-md-6'>
+                                        <label htmlFor='colorName' className='text-black'>Renk adı</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='colorName'
+                                            name='colorName'
+                                            onChange={this.onChange}
+                                            value={colorName}
+                                            placeholder='Renk adı giriniz' />
+                                    </div>
+                                    <div className='col-md-6'>
+                                        <label htmlFor='colorCode' className='text-black'>Renk kodu</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='colorCode'
+                                            name='colorCode'
+                                            onChange={this.onChange}
+                                            value={colorCode}
+                                            placeholder='Renk kodu giriniz' />
+                                    </div>
                                 </div>
 
-                                <div
-                                    className={'ml-2 px-3 border d-flex align-items-center justify-content-center'}
-                                    style={{ cursor: 'pointer' }}
-                                    onClick={this.onRemoveColorGroupClick}>
-                                    <IoIosClose size={24} />
+                                <div className='form-group row'>
+                                    <div className='col-md-4'>
+                                        <label htmlFor='form' className='text-black'>Form</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='form'
+                                            name='form'
+                                            onChange={this.onChange}
+                                            value={form}
+                                            placeholder='Form giriniz' />
+                                    </div>
+                                    <div className='col-md-4'>
+                                        <label htmlFor='benefit' className='text-black'>İhtiyaç/Yarar</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='benefit'
+                                            name='benefit'
+                                            onChange={this.onChange}
+                                            value={benefit}
+                                            placeholder='İhtiyaç/Yarar giriniz' />
+                                    </div>
+                                    <div className='col-md-4'>
+                                        <label htmlFor='colorDetail' className='text-black'>Bitiş</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='colorDetail'
+                                            name='colorDetail'
+                                            onChange={this.onChange}
+                                            value={colorDetail}
+                                            placeholder='Bitiş giriniz' />
+                                    </div>
                                 </div>
-                            </div>
 
-                        </div>
-                    </div>
+                                <div className='form-group row'>
+                                    <div className='col-md-4'>
+                                        <label htmlFor='brushThickness' className='text-black'>Fırça Kalınlığı</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='brushThickness'
+                                            name='brushThickness'
+                                            onChange={this.onChange}
+                                            value={brushThickness}
+                                            placeholder='Fırça Kalınlığı giriniz' />
+                                    </div>
+                                    <div className='col-md-4'>
+                                        <label htmlFor='kind' className='text-black'>Çeşit</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='kind'
+                                            name='kind'
+                                            onChange={this.onChange}
+                                            value={kind}
+                                            placeholder='Çeşit giriniz' />
+                                    </div>
+                                    <div className='col-md-4'>
+                                        <label htmlFor='feature' className='text-black'>Özellik</label>
+                                        <input
+                                            type='text'
+                                            className='form-control'
+                                            id='feature'
+                                            name='feature'
+                                            onChange={this.onChange}
+                                            value={feature}
+                                            placeholder='Özellik giriniz' />
+                                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-6'>
-                            <label htmlFor='colorName' className='text-black'>Renk adı</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='colorName'
-                                name='colorName'
-                                onChange={this.onChange}
-                                value={colorName}
-                                placeholder='Renk adı giriniz' />
-                        </div>
-                        <div className='col-md-6'>
-                            <label htmlFor='colorCode' className='text-black'>Renk kodu</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='colorCode'
-                                name='colorCode'
-                                onChange={this.onChange}
-                                value={colorCode}
-                                placeholder='Renk kodu giriniz' />
-                        </div>
-                    </div>
+                                <div className='form-group row'>
+                                    <div className='col-md-12'>
+                                        <label htmlFor='details' className='text-black'>Ürün detayı</label>
+                                        <textarea
+                                            type='text'
+                                            className='form-control'
+                                            id='details'
+                                            name='details'
+                                            placeholder='Ürün detayını giriniz'
+                                            onChange={this.onChange}
+                                            value={details} />
+                                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-4'>
-                            <label htmlFor='form' className='text-black'>Form</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='form'
-                                name='form'
-                                onChange={this.onChange}
-                                value={form}
-                                placeholder='Form giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='benefit' className='text-black'>İhtiyaç/Yarar</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='benefit'
-                                name='benefit'
-                                onChange={this.onChange}
-                                value={benefit}
-                                placeholder='İhtiyaç/Yarar giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='colorDetail' className='text-black'>Bitiş</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='colorDetail'
-                                name='colorDetail'
-                                onChange={this.onChange}
-                                value={colorDetail}
-                                placeholder='Bitiş giriniz' />
-                        </div>
-                    </div>
+                                <div className='form-group row'>
+                                    <div className='col-md-8' />
+                                    <div className='col-md-4 d-flex align-items-center justify-content-end'>
+                                        <label className='text-black'>Ürün Aktifliği</label>
+                                        <label className='switch ml-4'>
+                                            <input name='purchasable' className='switch-input' type='checkbox' onChange={this.onChange} checked={purchasable} />
+                                            <span className='slider round'></span>
+                                        </label>
+                                    </div>
+                                </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-4'>
-                            <label htmlFor='brushThickness' className='text-black'>Fırça Kalınlığı</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='brushThickness'
-                                name='brushThickness'
-                                onChange={this.onChange}
-                                value={brushThickness}
-                                placeholder='Fırça Kalınlığı giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='kind' className='text-black'>Çeşit</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='kind'
-                                name='kind'
-                                onChange={this.onChange}
-                                value={kind}
-                                placeholder='Çeşit giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='feature' className='text-black'>Özellik</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='feature'
-                                name='feature'
-                                onChange={this.onChange}
-                                value={feature}
-                                placeholder='Özellik giriniz' />
-                        </div>
-                    </div>
+                                <DnD
+                                    images={images}
+                                    handleFileChange={this.handleFileChange}
+                                    onRemoveImageClick={this.onRemoveImageClick}
+                                    setImages={this.setImages}
+                                />
 
-                    <div className='form-group row'>
-                        <div className='col-md-12'>
-                            <label htmlFor='details' className='text-black'>Ürün detayı</label>
-                            <textarea
-                                type='text'
-                                className='form-control'
-                                id='details'
-                                name='details'
-                                placeholder='Ürün detayını giriniz'
-                                onChange={this.onChange}
-                                value={details} />
-                        </div>
-                    </div>
-
-                    <DnD
-                        images={images}
-                        handleFileChange={this.handleFileChange}
-                        onRemoveImageClick={this.onRemoveImageClick}
-                        setImages={this.setImages}
-                    />
-
-                    <div className='form-group row mt-4'>
-                        <div className='col-lg-12'>
-                            <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü güncelle</button>
-                        </div>
-                    </div>
-
+                                <div className='form-group row mt-4'>
+                                    <div className='col-lg-12'>
+                                        <button className='btn btn-primary btn-block' onClick={this.onSaveProductClick}>Ürünü güncelle</button>
+                                    </div>
+                                </div>
+                            </>
+                        ) : <></>
+                    }
                 </div>
             </div>
         )
