@@ -13,6 +13,9 @@ import SaveProductComponent from '../components/SaveProductComponent'
 import UpdateProductComponent from '../components/UpdateProductComponent'
 import DeleteProductComponent from '../components/DeleteProductComponent'
 
+import SaveTypeComponent from '../components/SaveTypeComponent'
+import UpdateTypeComponent from '../components/UpdateTypeComponent'
+
 const cookies = new Cookies()
 
 class Home extends Component {
@@ -31,6 +34,8 @@ class Home extends Component {
             case 6: return <SaveProductComponent />
             case 7: return <UpdateProductComponent />
             case 8: return <DeleteProductComponent />
+            case 9: return <SaveTypeComponent />
+            case 10: return <UpdateTypeComponent />
             default: return null
         }
     }
@@ -46,6 +51,8 @@ class Home extends Component {
             case 'save-product': this.setState({ status: 6 }); break;
             case 'update-product': this.setState({ status: 7 }); break;
             case 'delete-product': this.setState({ status: 8 }); break;
+            case 'save-type': this.setState({ status: 9 }); break;
+            case 'update-type': this.setState({ status: 10 }); break;
             default: break;
         }
     }
@@ -60,51 +67,64 @@ class Home extends Component {
         return (
             <div className='col-md-12 py-4'>
                 <div className='row'>
-                    <div className='col-md-5 p-3 border'>
-                        <div className='col-md-12'>
+                    <div className='col-md-3'>
+                        <div className='col-md-12 border'>
+
+                            <div className='form-group my-4'>
+                                <h3>Kategori</h3>
+                            </div>
+
                             <div className='form-group'>
-                                <div className='row'>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block h-100' name={'save-category'} onClick={this.onBtnClick}>Kategori Ekle</button>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block h-100' name={'update-category'} onClick={this.onBtnClick}>Kategori Güncelle</button>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block h-100' name={'delete-category'} onClick={this.onBtnClick}>Kategori Sil</button>
-                                    </div>
-                                </div>
+                                <button className='btn btn-primary btn-block h-100' name={'save-category'} onClick={this.onBtnClick}>Kategori Ekle</button>
                             </div>
                             <div className='form-group'>
-                                <div className='row'>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block h-100' name={'save-sub-category'} onClick={this.onBtnClick}>Alt Kategori Ekle</button>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block h-100' name={'update-sub-category'} onClick={this.onBtnClick}>Alt Kategori Güncelle</button>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block h-100' name={'delete-sub-category'} onClick={this.onBtnClick}>Alt Kategori Sil</button>
-                                    </div>
-                                </div>
+                                <button className='btn btn-primary btn-block h-100' name={'update-category'} onClick={this.onBtnClick}>Kategori Güncelle</button>
                             </div>
                             <div className='form-group'>
-                                <div className='row'>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block' name={'save-product'} onClick={this.onBtnClick}>Ürün Ekle</button>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block' name={'update-product'} onClick={this.onBtnClick}>Ürün Güncelle</button>
-                                    </div>
-                                    <div className='col-md-4'>
-                                        <button className='btn btn-primary btn-block' name={'delete-product'} onClick={this.onBtnClick}>Ürün Sil</button>
-                                    </div>
-                                </div>
+                                <button className='btn btn-primary btn-block h-100' name={'delete-category'} onClick={this.onBtnClick}>Kategori Sil</button>
+                            </div>
+
+
+                            <div className='form-group my-4'>
+                                <h3>Alt Kategori</h3>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block h-100' name={'save-sub-category'} onClick={this.onBtnClick}>Alt Kategori Ekle</button>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block h-100' name={'update-sub-category'} onClick={this.onBtnClick}>Alt Kategori Güncelle</button>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block h-100' name={'delete-sub-category'} onClick={this.onBtnClick}>Alt Kategori Sil</button>
+                            </div>
+
+
+                            <div className='form-group my-4'>
+                                <h3>Ürün</h3>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block' name={'save-product'} onClick={this.onBtnClick}>Ürün Ekle</button>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block' name={'update-product'} onClick={this.onBtnClick}>Ürün Güncelle</button>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block' name={'delete-product'} onClick={this.onBtnClick}>Ürün Sil</button>
+                            </div>
+
+                            <div className='form-group my-4'>
+                                <h3>Ürün Tipi</h3>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block' name={'save-type'} onClick={this.onBtnClick}>Ürün Tipi Ekle</button>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block' name={'update-type'} onClick={this.onBtnClick}>Ürün Tipi Güncelle</button>
                             </div>
                         </div>
                     </div>
 
-                    <div className='col-md-7'>
+                    <div className='col-md-9'>
                         {
                             this.getForm(this.state.status)
                         }
