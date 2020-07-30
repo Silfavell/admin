@@ -82,7 +82,7 @@ class UpdateSubCategoryComponent extends Component {
 
                     <div className='form-group row'>
                         <div className='col-md-12'>
-                            <label htmlFor='subCategoryId' className='text-black'>Silmek istediğiniz alt kategoriyi seçiniz  <span className='text-danger'>*</span></label>
+                            <label htmlFor='subCategoryId' className='text-black'>Güncellemek istediğiniz alt kategoriyi seçiniz  <span className='text-danger'>*</span></label>
                             <select
                                 type='text'
                                 className='form-control'

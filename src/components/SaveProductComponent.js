@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import axios from 'axios'
 import { IoMdCreate, IoIosClose } from 'react-icons/io'
 
@@ -6,16 +6,21 @@ import DnD from '../screens/DnD'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
+import SpecificationInputs from './SpecificationInputs'
 
 class SaveProductComponent extends Component {
 
+    specificationsRef = createRef()
+
     state = {
         categories: [],
+        types: [],
         productsWithCategories: [],
         brandMode: 0,
 
         categoryId: '',
         subCategoryId: '',
+        type: '',
         name: '',
         details: '',
         price: '',
@@ -27,18 +32,15 @@ class SaveProductComponent extends Component {
         colorName: '',
         colorCode: '',
 
-        form: '',
-        benefit: '',
-        colorDetail: '',
-        kind: '',
-        brushThickness: '',
-        feature: '',
-
         images: []
     }
 
     getCategories = () => (
         axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
+    )
+
+    getTypes = () => (
+        axios.get(`${process.env.REACT_APP_API_URL}/admin/types`).then(({ data, status }) => data)
     )
 
     getProductsWithCategories = () => (
@@ -52,8 +54,8 @@ class SaveProductComponent extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        Promise.all([this.getCategories(), this.getProductsWithCategories()]).then((vals) => {
-            this.setState({ categories: vals[0], productsWithCategories: vals[1] })
+        Promise.all([this.getCategories(), this.getTypes(), this.getProductsWithCategories()]).then((vals) => {
+            this.setState({ categories: vals[0], types: vals[1], productsWithCategories: vals[2] })
         })
     }
 
@@ -101,19 +103,13 @@ class SaveProductComponent extends Component {
         const {
             categoryId,
             subCategoryId,
+            type,
             name,
             details,
             colorGroup,
 
             colorName,
             colorCode,
-
-            form,
-            benefit,
-            colorDetail,
-            kind,
-            brushThickness,
-            feature,
 
             brand,
             price,
@@ -128,17 +124,20 @@ class SaveProductComponent extends Component {
             formData.append('image-' + index, image)
         })
 
-        const specifications = {}
+        if (this.specificationsRef.current) {
+            const specifications = Object.keys(this.specificationsRef.current.state).reduce((prevVal, curVal) => {
+                return [{
+                    name: curVal,
+                    value: this.specificationsRef.current.state[curVal]
+                }, ...prevVal]
+            }, [])
 
-        if (form.length > 0) specifications.form = form
-        if (benefit.length > 0) specifications.benefit = benefit
-        if (colorDetail.length > 0) specifications.colorDetail = colorDetail
-        if (kind.length > 0) specifications.kind = kind
-        if (brushThickness.length > 0) specifications.brushThickness = brushThickness
-        if (feature.length > 0) specifications.feature = feature
+            if (specifications.length > 0) formData.append('specifications', JSON.stringify(specifications))
+        }
 
         if (categoryId.length > 0) formData.append('categoryId', categoryId)
         if (subCategoryId.length > 0) formData.append('subCategoryId', subCategoryId)
+        if (type.length > 0) formData.append('type', type)
         if (name.length > 0) formData.append('name', name)
         if (details.length > 0) formData.append('details', details)
         if (colorGroup.length > 0) formData.append('colorGroup', colorGroup)
@@ -149,7 +148,6 @@ class SaveProductComponent extends Component {
             }))
         }
 
-        if (Object.keys(specifications).length > 0) formData.append('specifications', JSON.stringify(specifications))
         if (brand.length > 0) formData.append('brand', brand)
         if (price.length > 0) formData.append('price', price)
         if (discountedPrice.length > 0) formData.append('discountedPrice', discountedPrice)
@@ -184,13 +182,6 @@ class SaveProductComponent extends Component {
                         colorName: '',
                         colorCode: '',
 
-                        form: '',
-                        benefit: '',
-                        colorDetail: '',
-                        kind: '',
-                        brushThickness: '',
-                        feature: '',
-
                         images: []
                     })
                 }
@@ -221,12 +212,14 @@ class SaveProductComponent extends Component {
     render() {
         const {
             categories,
+            types,
             productsWithCategories,
             brandMode,
             images,
 
             categoryId,
             subCategoryId,
+            type,
             name,
             details,
             brand,
@@ -236,15 +229,10 @@ class SaveProductComponent extends Component {
             colorGroup,
 
             colorName,
-            colorCode,
-
-            form,
-            benefit,
-            colorDetail,
-            kind,
-            brushThickness,
-            feature,
+            colorCode
         } = this.state
+
+        const selectedType = types.find((t) => t._id === type)
 
         return (
             <div className='p-3 border'>
@@ -281,6 +269,27 @@ class SaveProductComponent extends Component {
                                 {
                                     categories.find((category) => category._id === categoryId)?.subCategories.map((subCategory) => (
                                         <option value={subCategory._id}>{subCategory.name}</option>
+                                    ))
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div className='form-group row'>
+
+                        <div className='col-md-12'>
+                            <label htmlFor='type' className='text-black'>Ürün Tipi <span className='text-danger'>*</span></label>
+                            <select
+                                className='form-control'
+                                id='type'
+                                name='type'
+                                onChange={this.onChange}
+                                value={type}>
+                                <option selected unselectable value={null}>Ürün Tipi seçiniz</option>
+                                {
+                                    types.map((type) => (
+                                        <option value={type._id}>{type.name}</option>
                                     ))
                                 }
                             </select>
@@ -433,77 +442,9 @@ class SaveProductComponent extends Component {
                         </div>
                     </div>
 
-                    <div className='form-group row'>
-                        <div className='col-md-4'>
-                            <label htmlFor='form' className='text-black'>Form</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='form'
-                                name='form'
-                                onChange={this.onChange}
-                                value={form}
-                                placeholder='Form giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='benefit' className='text-black'>İhtiyaç/Yarar</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='benefit'
-                                name='benefit'
-                                onChange={this.onChange}
-                                value={benefit}
-                                placeholder='İhtiyaç/Yarar giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='colorDetail' className='text-black'>Bitiş</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='colorDetail'
-                                name='colorDetail'
-                                onChange={this.onChange}
-                                value={colorDetail}
-                                placeholder='Bitiş giriniz' />
-                        </div>
-                    </div>
-
-                    <div className='form-group row'>
-                        <div className='col-md-4'>
-                            <label htmlFor='brushThickness' className='text-black'>Fırça Kalınlığı</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='brushThickness'
-                                name='brushThickness'
-                                onChange={this.onChange}
-                                value={brushThickness}
-                                placeholder='Fırça Kalınlığı giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='kind' className='text-black'>Çeşit</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='kind'
-                                name='kind'
-                                onChange={this.onChange}
-                                value={kind}
-                                placeholder='Çeşit giriniz' />
-                        </div>
-                        <div className='col-md-4'>
-                            <label htmlFor='feature' className='text-black'>Özellik</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='feature'
-                                name='feature'
-                                onChange={this.onChange}
-                                value={feature}
-                                placeholder='Özellik giriniz' />
-                        </div>
-                    </div>
+                    {
+                        selectedType && <SpecificationInputs key={selectedType._id} ref={this.specificationsRef} selectedType={selectedType} />
+                    }
 
                     <div className='form-group row'>
                         <div className='col-md-12'>

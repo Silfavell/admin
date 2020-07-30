@@ -20,7 +20,7 @@ const cookies = new Cookies()
 
 class Home extends Component {
     state = {
-        status: 0
+        status: 6
     }
 
     getForm = (status) => {

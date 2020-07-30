@@ -9,7 +9,8 @@ class UpdateTypeComponent extends Component {
     state = {
         types: [],
         typeId: '',
-        name: ''
+        name: '',
+        specifications: ''
     }
 
     getTypes = () => (
@@ -25,18 +26,31 @@ class UpdateTypeComponent extends Component {
     onChange = (event) => {
         const { name, value } = event.target
 
-        this.setState({ [name]: value })
-    }
+        if (name === 'typeId') {
+            const selectedType = this.state.types.find((type) => value === type._id)
 
+            this.setState({
+                typeId: value,
+                name: selectedType.name,
+                specifications: selectedType.specifications
+            })
+        } else {
+            this.setState({ [name]: value })
+        }
+
+    }
 
     onUpdateClick = () => {
         if (this.state.typeId.length > 0 && this.state.name.length > 0) {
             if (window.confirm(`Seçili ürün tipini güncellemek istediğinize emin misiniz?`)) {
-                axios.put(`${process.env.REACT_APP_API_URL}/admin/update-type/${this.state.typeId}`, { name: this.state.name }).then(({ status }) => {
+                axios.put(`${process.env.REACT_APP_API_URL}/admin/update-type/${this.state.typeId}`, {
+                    name: this.state.name,
+                    specifications: this.state.specifications.trim().split(',')
+                }).then(({ status }) => {
                     if (status === 200) {
                         alert('Ürün tipi güncellendi')
 
-                        this.setState({ typeId: '', name: '' })
+                        this.setState({ typeId: '', name: '', specifications: '' })
                     }
                 })
             }
@@ -49,7 +63,8 @@ class UpdateTypeComponent extends Component {
         const {
             types,
             typeId,
-            name
+            name,
+            specifications
         } = this.state
 
         return (
@@ -85,6 +100,20 @@ class UpdateTypeComponent extends Component {
                                 placeholder='Tip adını giriniz'
                                 onChange={this.onChange}
                                 value={name} />
+                        </div>
+                    </div>
+
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='specifications' className='text-black'>Tipin içerebileceği özellikleri ekleyiniz (Aralara virgül koyunuz, örnek: "Renk,Fırça Kalınlığı") <span className='text-danger'>*</span></label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                id='specifications'
+                                name='specifications'
+                                placeholder='Tipin içerebileceği özellikler'
+                                onChange={this.onChange}
+                                value={specifications} />
                         </div>
                     </div>
 
