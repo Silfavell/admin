@@ -3,10 +3,11 @@ import axios from 'axios'
 import { IoMdCreate, IoIosClose } from 'react-icons/io'
 
 import DnD from '../screens/DnD'
+import SpecificationInputs from './SpecificationInputs'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
-import SpecificationInputs from './SpecificationInputs'
+
 
 class SaveProductComponent extends Component {
 
@@ -171,6 +172,7 @@ class SaveProductComponent extends Component {
                     this.setState({
                         categoryId: '',
                         subCategoryId: '',
+                        type: '',
                         name: '',
                         details: '',
                         price: '',

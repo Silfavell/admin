@@ -2,7 +2,16 @@ import React from 'react'
 
 class SpecificationInputs extends React.Component {
 
-    state = {}
+    constructor(props) {
+        super(props)
+        this.state = {}
+
+        if (this.props.specifications) {
+            this.state = this.props.specifications.reduce((prevVal, curVal) => (
+                { ...prevVal, [curVal.name]: curVal.value }
+            ), {})
+        }
+    }
 
     onChange = (event) => {
         const { name, value } = event.target
