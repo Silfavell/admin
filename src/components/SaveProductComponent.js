@@ -15,7 +15,6 @@ class SaveProductComponent extends Component {
 
     state = {
         categories: [],
-        types: [],
         productsWithCategories: [],
         brandMode: 0,
 
@@ -40,10 +39,6 @@ class SaveProductComponent extends Component {
         axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
     )
 
-    getTypes = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/admin/types`).then(({ data, status }) => data)
-    )
-
     getProductsWithCategories = () => (
         axios.get(`${process.env.REACT_APP_API_URL}/products-with-categories`).then(({ data, status }) => data)
     )
@@ -55,8 +50,8 @@ class SaveProductComponent extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        Promise.all([this.getCategories(), this.getTypes(), this.getProductsWithCategories()]).then((vals) => {
-            this.setState({ categories: vals[0], types: vals[1], productsWithCategories: vals[2] })
+        Promise.all([this.getCategories(), this.getProductsWithCategories()]).then((vals) => {
+            this.setState({ categories: vals[0], productsWithCategories: vals[1] })
         })
     }
 
@@ -214,7 +209,6 @@ class SaveProductComponent extends Component {
     render() {
         const {
             categories,
-            types,
             productsWithCategories,
             brandMode,
             images,
@@ -234,7 +228,9 @@ class SaveProductComponent extends Component {
             colorCode
         } = this.state
 
-        const selectedType = types.find((t) => t._id === type)
+        const selectedCategory = this.state.categories.find((category) => category._id === categoryId)
+        const selectedSubCategory = selectedCategory?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
+        const selectedType = selectedSubCategory?.types.find((t) => t._id === type)
 
         return (
             <div className='p-3 border'>
@@ -290,7 +286,7 @@ class SaveProductComponent extends Component {
                                 value={type}>
                                 <option selected unselectable value={null}>Ürün Tipi seçiniz</option>
                                 {
-                                    types.map((type) => (
+                                    selectedSubCategory?.types.map((type) => (
                                         <option value={type._id}>{type.name}</option>
                                     ))
                                 }
