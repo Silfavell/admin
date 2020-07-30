@@ -16,10 +16,14 @@ class SaveTypeComponent extends Component {
 
     onSaveClick = () => {
         if (window.confirm(`${this.state.name} isimli tipi eklemek istediğinize emin misiniz ?`)) {
-            axios.post(`${process.env.REACT_APP_API_URL}/admin/save-type`, {
-                name: this.state.name,
-                specifications: this.state.specifications.trim().split(',')
-            }).then(({ status, data }) => {
+            const body = {}
+
+            body.name = this.state.name
+            if (this.state.specifications.trim().length > 0) {
+                body.specifications = this.state.specifications.trim().split(',')
+            }
+
+            axios.post(`${process.env.REACT_APP_API_URL}/admin/save-type`, body).then(({ status, data }) => {
                 if (status === 200) {
                     alert('Ürün tipi eklendi')
 

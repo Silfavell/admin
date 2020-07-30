@@ -43,10 +43,14 @@ class UpdateTypeComponent extends Component {
     onUpdateClick = () => {
         if (this.state.typeId.length > 0 && this.state.name.length > 0) {
             if (window.confirm(`Seçili ürün tipini güncellemek istediğinize emin misiniz?`)) {
-                axios.put(`${process.env.REACT_APP_API_URL}/admin/update-type/${this.state.typeId}`, {
-                    name: this.state.name,
-                    specifications: this.state.specifications.trim().split(',')
-                }).then(({ status }) => {
+                const body = {}
+
+                body.name = this.state.name
+                if (this.state.specifications.trim().length > 0) {
+                    body.specifications = this.state.specifications.trim().split(',')
+                }
+
+                axios.put(`${process.env.REACT_APP_API_URL}/admin/update-type/${this.state.typeId}`, body).then(({ status }) => {
                     if (status === 200) {
                         alert('Ürün tipi güncellendi')
 

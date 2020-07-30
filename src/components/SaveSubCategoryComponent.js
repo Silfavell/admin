@@ -7,6 +7,9 @@ class SaveSubCategoryComponent extends Component {
 
     state = {
         categories: [],
+        types: [],
+
+        selectedTypes: [],
         parentCategory: null,
         subCategoryName: ''
     }
@@ -15,11 +18,22 @@ class SaveSubCategoryComponent extends Component {
         this.setState({ [event.target.name]: event.target.value })
     }
 
+    onTypeSelect = (event) => {
+        if (event.target.checked) {
+            this.state.selectedTypes.push(event.target.id)
+        } else {
+            this.state.selectedTypes.splice(this.state.selectedTypes.indexOf(event.target.id))
+        }
+
+        this.setState({ selectedTypes: this.state.selectedTypes })
+    }
+
     onSaveClick = () => {
         if (window.confirm(`${this.state.subCategoryName} isimli alt kategoriyi eklemek istediğinize emin misiniz ?`)) {
             axios.post(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
                 parentCategoryId: this.state.parentCategory,
-                name: this.state.subCategoryName
+                name: this.state.subCategoryName,
+                types: this.state.selectedTypes
             }).then(({ status, data }) => {
                 if (status === 200) {
                     alert('Alt kategori eklendi')
@@ -32,9 +46,13 @@ class SaveSubCategoryComponent extends Component {
         axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
     )
 
+    getTypes = () => (
+        axios.get(`${process.env.REACT_APP_API_URL}/admin/types`).then(({ data, status }) => data)
+    )
+
     UNSAFE_componentWillMount() {
-        this.getCategories().then((categories) => {
-            this.setState({ categories })
+        Promise.all([this.getCategories(), this.getTypes()]).then((vals) => {
+            this.setState({ categories: vals[0], types: vals[1] })
         })
     }
 
@@ -42,7 +60,9 @@ class SaveSubCategoryComponent extends Component {
         const {
             subCategoryName,
             parentCategory,
-            categories
+
+            categories,
+            types
         } = this.state
 
         return (
@@ -78,6 +98,28 @@ class SaveSubCategoryComponent extends Component {
                             placeholder='Alt kategori adını giriniz'
                             onChange={this.onChange}
                             value={subCategoryName} />
+                    </div>
+                </div>
+
+                <div className='form-group'>
+                    <div className='col-md-12'>
+                        <label>Alt kategorinin içerebileceği ürün tiplerini seçiniz</label>
+                        <ul class='list-group'>
+                            {
+                                types.map((type) => (
+                                    <li class='list-group-item'>
+                                        <div class='custom-control custom-checkbox'>
+                                            <input
+                                                type='checkbox'
+                                                class='custom-control-input'
+                                                onChange={this.onTypeSelect} id={type._id}
+                                                checked={this.state.selectedTypes.includes(type._id)} />
+                                            <label class='custom-control-label' for={type._id} style={{ cursor: 'pointer' }}>{type.name}</label>
+                                        </div>
+                                    </li>
+                                ))
+                            }
+                        </ul>
                     </div>
                 </div>
 
