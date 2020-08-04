@@ -15,6 +15,7 @@ import DeleteProductComponent from '../components/DeleteProductComponent'
 
 import SaveTypeComponent from '../components/SaveTypeComponent'
 import UpdateTypeComponent from '../components/UpdateTypeComponent'
+import ListTickets from '../components/ListTickets'
 
 const cookies = new Cookies()
 
@@ -36,6 +37,9 @@ class Home extends Component {
             case 8: return <DeleteProductComponent />
             case 9: return <SaveTypeComponent />
             case 10: return <UpdateTypeComponent />
+
+            case 11: return <ListTickets />
+
             default: return null
         }
     }
@@ -53,6 +57,9 @@ class Home extends Component {
             case 'delete-product': this.setState({ status: 8 }); break;
             case 'save-type': this.setState({ status: 9 }); break;
             case 'update-type': this.setState({ status: 10 }); break;
+
+            case 'list-tickets': this.setState({ status: 11 }); break;
+
             default: break;
         }
     }
@@ -120,6 +127,13 @@ class Home extends Component {
                             </div>
                             <div className='form-group'>
                                 <button className='btn btn-primary btn-block' name={'update-type'} onClick={this.onBtnClick}>Ürün Tipi Güncelle</button>
+                            </div>
+
+                            <div className='form-group my-4'>
+                                <h3>Destek</h3>
+                            </div>
+                            <div className='form-group'>
+                                <button className='btn btn-primary btn-block' name={'list-tickets'} onClick={this.onBtnClick}>Destek Mesajlarını Listele</button>
                             </div>
                         </div>
                     </div>
