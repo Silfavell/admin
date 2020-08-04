@@ -2,7 +2,6 @@
 import axios from 'axios'
 import Cookies from 'universal-cookie'
 import VanillaToasts from 'vanillatoasts'
-
 import 'vanillatoasts/vanillatoasts.css'
 
 const cookies = new Cookies()

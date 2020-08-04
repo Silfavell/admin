@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -34,14 +36,24 @@ class UpdateCategoryComponent extends Component {
             if (window.confirm(`Seçili kategoriyi güncellemek istediğinize emin misiniz?`)) {
                 axios.put(`${process.env.REACT_APP_API_URL}/admin/category/${this.state.categoryId}`, { name: this.state.name }).then(({ status }) => {
                     if (status === 200) {
-                        alert('Kategori güncellendi')
+                        VanillaToasts.create({
+                            title: 'Kategori güncellendi',
+                            type: 'success',
+                            positionClass: 'topRight',
+                            timeout: 3 * 1000
+                        })
 
                         this.setState({ categoryId: '', name: '' })
                     }
                 })
             }
         } else {
-            alert('Lütfen gerekli alanları doldurunuz')
+            VanillaToasts.create({
+                title: 'Lütfen gerekli alanları doldurunuz',
+                type: 'warning',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         }
     }
 

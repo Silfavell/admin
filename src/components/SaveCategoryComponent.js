@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -19,10 +21,13 @@ class SaveSubCategoryComponent extends Component {
                 name: this.state.name
             }).then(({ status, data }) => {
                 if (status === 200) {
-                    alert('Kategori eklendi')
+                    VanillaToasts.create({
+                        title: 'Kategori eklendi',
+                        type: 'success',
+                        positionClass: 'topRight',
+                        timeout: 3 * 1000
+                    })
                 }
-            }).catch((reason) => {
-                alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
             })
         }
     }

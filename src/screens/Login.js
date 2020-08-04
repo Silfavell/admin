@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Cookies from 'universal-cookie'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -23,7 +25,12 @@ class Login extends Component {
                 this.props.history.push('/')
             }
         }).catch(() => {
-            alert('Hatalı token')
+            VanillaToasts.create({
+                title: 'Hatalı Token',
+                type: 'error',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         })
     }
 

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -34,14 +36,24 @@ class DeleteSubCategoryComponent extends Component {
             if (window.confirm(`Seçili alt kategoriyi silmek istediğinize emin misiniz?`)) {
                 axios.delete(`${process.env.REACT_APP_API_URL}/admin/sub-category?parentCategoryId=${this.state.categoryId}&_id=${this.state.subCategoryId}`).then(({ status }) => {
                     if (status === 200) {
-                        alert('Alt kategori silindi')
+                        VanillaToasts.create({
+                            title: 'Alt lategori silindi',
+                            type: 'success',
+                            positionClass: 'topRight',
+                            timeout: 3 * 1000
+                        })
 
                         this.setState({ categoryId: '', subCategoryId: '' })
                     }
                 })
             }
         } else {
-            alert('Lütfen silmek istediğiniz alt kategoriyi seçiniz')
+            VanillaToasts.create({
+                title: 'Lütfen silmek istediğiniz alt kategoriyi seçiniz',
+                type: 'warning',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         }
     }
 

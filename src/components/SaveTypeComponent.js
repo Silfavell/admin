@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -25,12 +27,15 @@ class SaveTypeComponent extends Component {
 
             axios.post(`${process.env.REACT_APP_API_URL}/admin/save-type`, body).then(({ status, data }) => {
                 if (status === 200) {
-                    alert('Ürün tipi eklendi')
+                    VanillaToasts.create({
+                        title: 'Ürün tipi eklendi',
+                        type: 'success',
+                        positionClass: 'topRight',
+                        timeout: 3 * 1000
+                    })
 
                     this.setState({ name: '', specifications: '' })
                 }
-            }).catch((reason) => {
-                alert(reason?.response?.data?.error ?? 'Beklenmedik bir hata oluştu lütfen girdiğiniz değerleri kontrol ediniz')
             })
         }
     }

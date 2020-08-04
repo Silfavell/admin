@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -52,14 +54,24 @@ class UpdateTypeComponent extends Component {
 
                 axios.put(`${process.env.REACT_APP_API_URL}/admin/update-type/${this.state.typeId}`, body).then(({ status }) => {
                     if (status === 200) {
-                        alert('Ürün tipi güncellendi')
+                        VanillaToasts.create({
+                            title: 'Ürün tipi güncellendi',
+                            type: 'success',
+                            positionClass: 'topRight',
+                            timeout: 3 * 1000
+                        })
 
                         this.setState({ typeId: '', name: '', specifications: '' })
                     }
                 })
             }
         } else {
-            alert('Lütfen gerekli alanları doldurunuz')
+            VanillaToasts.create({
+                title: 'Lütfen gerekli alanları doldurunuz',
+                type: 'warning',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         }
     }
 

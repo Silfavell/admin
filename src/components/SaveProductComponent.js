@@ -1,6 +1,8 @@
 import React, { Component, createRef } from 'react'
 import axios from 'axios'
 import { IoMdCreate, IoIosClose } from 'react-icons/io'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import DnD from '../screens/DnD'
 import SpecificationInputs from './SpecificationInputs'
@@ -162,7 +164,12 @@ class SaveProductComponent extends Component {
                 }
             }).then(({ status }) => {
                 if (status === 200) {
-                    alert('Ürün eklendi')
+                    VanillaToasts.create({
+                        title: 'Ürün eklendi',
+                        type: 'success',
+                        positionClass: 'topRight',
+                        timeout: 3 * 1000
+                    })
 
                     this.setState({
                         categoryId: '',

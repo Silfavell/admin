@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -76,14 +78,24 @@ class UpdateSubCategoryComponent extends Component {
                     types: this.state.selectedTypes
                 }).then(({ status }) => {
                     if (status === 200) {
-                        alert('Alt kategori güncellendi')
+                        VanillaToasts.create({
+                            title: 'Alt kategori güncellendi',
+                            type: 'success',
+                            positionClass: 'topRight',
+                            timeout: 3 * 1000
+                        })
 
                         this.setState({ categoryId: '', subCategoryId: '', name: '' })
                     }
                 })
             }
         } else {
-            alert('Lütfen gerekli alanları doldurunuz')
+            VanillaToasts.create({
+                title: 'Lütfen gerekli alanları doldurunuz',
+                type: 'warning',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         }
     }
 

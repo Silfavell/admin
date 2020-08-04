@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -33,7 +35,12 @@ class DeleteProductComponent extends Component {
 
                 axios.delete(`${process.env.REACT_APP_API_URL}/admin/product/${this.state.deleteId}`).then(({ status }) => {
                     if (status === 200) {
-                        alert('Ürün silindi')
+                        VanillaToasts.create({
+                            title: 'Ürün silindi',
+                            type: 'success',
+                            positionClass: 'topRight',
+                            timeout: 3 * 1000
+                        })
 
                         this.setState({ deleteId: '' })
                     }
@@ -41,7 +48,12 @@ class DeleteProductComponent extends Component {
 
             }
         } else {
-            alert('Lütfen silmek istediğiniz ürünü seçiniz')
+            VanillaToasts.create({
+                title: 'Lütfen silmek istediğiniz ürünü seçiniz',
+                type: 'warning',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         }
     }
 

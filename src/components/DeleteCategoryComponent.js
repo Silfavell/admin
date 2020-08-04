@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -33,14 +36,24 @@ class DeleteCategoryComponent extends Component {
             if (window.confirm(`Seçili kategoriyi silmek istediğinize emin misiniz?`)) {
                 axios.delete(`${process.env.REACT_APP_API_URL}/admin/category/${this.state.categoryId}`).then(({ status }) => {
                     if (status === 200) {
-                        alert('Kategori silindi')
+                        VanillaToasts.create({
+                            title: 'Kategori silindi',
+                            type: 'success',
+                            positionClass: 'topRight',
+                            timeout: 3 * 1000
+                        })
 
                         this.setState({ categoryId: '' })
                     }
                 })
             }
         } else {
-            alert('Lütfen silmek istediğiniz kategoriyi seçiniz')
+            VanillaToasts.create({
+                title: 'Lütfen silmek istediğiniz kategoriyi seçiniz',
+                type: 'warning',
+                positionClass: 'topRight',
+                timeout: 3 * 1000
+            })
         }
     }
 

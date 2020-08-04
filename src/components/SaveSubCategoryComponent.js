@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
+import 'vanillatoasts/vanillatoasts.css'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -36,7 +38,12 @@ class SaveSubCategoryComponent extends Component {
                 types: this.state.selectedTypes
             }).then(({ status, data }) => {
                 if (status === 200) {
-                    alert('Alt kategori eklendi')
+                    VanillaToasts.create({
+                        title: 'Alt kategori eklendi',
+                        type: 'success',
+                        positionClass: 'topRight',
+                        timeout: 3 * 1000
+                    })
                 }
             })
         }
