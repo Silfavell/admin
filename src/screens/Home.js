@@ -20,48 +20,28 @@ import ListTickets from '../components/ListTickets'
 const cookies = new Cookies()
 
 class Home extends Component {
-    state = {
-        status: 6
-    }
+    getForm = () => {
+        switch (this.props.location.pathname) {
+            case '/save-category': return <SaveCategoryComponent />
+            case '/update-category': return <UpdateCategoryComponent />
+            case '/delete-category': return <DeleteCategoryComponent />
+            case '/save-sub-category': return <SaveSubCategoryComponent />
+            case '/update-sub-category': return <UpdateSubCategoryComponent />
+            case '/delete-sub-category': return <DeleteSubCategoryComponent />
+            case '/save-product': return <SaveProductComponent />
+            case '/update-product': return <UpdateProductComponent />
+            case '/delete-product': return <DeleteProductComponent />
+            case '/save-type': return <SaveTypeComponent />
+            case '/update-type': return <UpdateTypeComponent />
 
-    getForm = (status) => {
-        switch (status) {
-            case 0: return <SaveCategoryComponent />
-            case 1: return <UpdateCategoryComponent />
-            case 2: return <DeleteCategoryComponent />
-            case 3: return <SaveSubCategoryComponent />
-            case 4: return <UpdateSubCategoryComponent />
-            case 5: return <DeleteSubCategoryComponent />
-            case 6: return <SaveProductComponent />
-            case 7: return <UpdateProductComponent />
-            case 8: return <DeleteProductComponent />
-            case 9: return <SaveTypeComponent />
-            case 10: return <UpdateTypeComponent />
+            case '/list-tickets': return <ListTickets />
 
-            case 11: return <ListTickets />
-
-            default: return null
+            default: return <SaveProductComponent />
         }
     }
 
     onBtnClick = (event) => {
-        switch (event.target.name) {
-            case 'save-category': this.setState({ status: 0 }); break;
-            case 'update-category': this.setState({ status: 1 }); break;
-            case 'delete-category': this.setState({ status: 2 }); break;
-            case 'save-sub-category': this.setState({ status: 3 }); break;
-            case 'update-sub-category': this.setState({ status: 4 }); break;
-            case 'delete-sub-category': this.setState({ status: 5 }); break;
-            case 'save-product': this.setState({ status: 6 }); break;
-            case 'update-product': this.setState({ status: 7 }); break;
-            case 'delete-product': this.setState({ status: 8 }); break;
-            case 'save-type': this.setState({ status: 9 }); break;
-            case 'update-type': this.setState({ status: 10 }); break;
-
-            case 'list-tickets': this.setState({ status: 11 }); break;
-
-            default: break;
-        }
+        this.props.history.push(event.target.name)
     }
 
     UNSAFE_componentWillMount() {
@@ -140,7 +120,7 @@ class Home extends Component {
 
                     <div className='col-md-9'>
                         {
-                            this.getForm(this.state.status)
+                            this.getForm()
                         }
                     </div>
                 </div>

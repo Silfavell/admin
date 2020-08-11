@@ -12,7 +12,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Switch>
-				<Route exact path={'/'} component={Home} />
+				<Route exact path={'/:selected?'} component={Home} />
 				<Route path={'/login'} component={Login} />
 			</Switch>
 		</BrowserRouter>
