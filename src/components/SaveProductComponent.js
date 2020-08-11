@@ -196,8 +196,8 @@ class SaveProductComponent extends Component {
     handleFileChange = (event) => {
         const { files } = event.target
 
-        if (files && files[0]) {
-            this.state.images.push(files[0])
+        if (files) {
+            this.state.images.push(...files)
             this.setState({ images: this.state.images })
         }
     }

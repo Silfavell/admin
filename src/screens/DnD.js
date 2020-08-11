@@ -58,6 +58,7 @@ class DnD extends Component {
                 id='image'
                 type='file'
                 accept='image/*'
+                multiple='multiple'
                 onChange={this.props.handleFileChange}
             />
         </div>
