@@ -121,7 +121,7 @@ class UpdateTypeComponent extends Component {
 
                     <div className='form-group row'>
                         <div className='col-md-12'>
-                            <label htmlFor='specifications' className='text-black'>Tipin içerebileceği özellikleri ekleyiniz (Aralara virgül koyunuz, örnek: "Renk,Fırça Kalınlığı") <span className='text-danger'>*</span></label>
+                            <label htmlFor='specifications' className='text-black'>Tipin içerebileceği özellikleri ekleyiniz (Aralara virgül koyunuz, örnek: 'Renk,Fırça Kalınlığı') <span className='text-danger'>*</span></label>
                             <input
                                 type='text'
                                 className='form-control'

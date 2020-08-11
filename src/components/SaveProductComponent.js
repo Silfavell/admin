@@ -90,7 +90,7 @@ class SaveProductComponent extends Component {
 
     onRemoveImageClick = (index) => {
         this.state.images.splice(index, 1)
-        this.setState({ images: this.state.images })
+        this.setState({ images: this.setImageIds(this.state.images) })
     }
 
     setImages = (images) => {
@@ -198,7 +198,7 @@ class SaveProductComponent extends Component {
 
         if (files) {
             this.state.images.push(...files)
-            this.setState({ images: this.state.images })
+            this.setState({ images: this.setImageIds(this.state.images) })
         }
     }
 
@@ -211,6 +211,19 @@ class SaveProductComponent extends Component {
         }
 
         reader.readAsDataURL(imageFile)
+    }
+
+    uid = () => {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2)
+    }
+
+    setImageIds = (images) => {
+        return images.map((image) => {
+            if (!image._id) {
+                image._id = this.uid()
+            }
+            return image
+        })
     }
 
     render() {

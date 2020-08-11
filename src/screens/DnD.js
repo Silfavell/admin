@@ -86,7 +86,7 @@ class DnD extends Component {
     render() {
         return (
             <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId="droppable" direction="horizontal">
+                <Droppable droppableId='droppable' direction='horizontal'>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -98,7 +98,7 @@ class DnD extends Component {
                             }
 
                             {this.props.images.map((item, index) => ( // draggableId unique olması lazım..
-                                <Draggable key={item.size.toString()} draggableId={item.size.toString()} index={index}>
+                                <Draggable key={item._id.toString()} draggableId={item._id.toString()} index={index}>
                                     {(provided, snapshot) => this.renderImage(
                                         item,
                                         index,
