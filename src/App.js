@@ -12,8 +12,8 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Switch>
-				<Route exact path={'/:selected?'} component={Home} />
 				<Route path={'/login'} component={Login} />
+				<Route exact path={'/:selected?'} component={Home} />
 			</Switch>
 		</BrowserRouter>
 	)
