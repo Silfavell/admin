@@ -200,6 +200,8 @@ class SaveProductComponent extends Component {
             this.state.images.push(...files)
             this.setState({ images: this.setImageIds(this.state.images) })
         }
+
+        event.target.value = null
     }
 
     getImageData = (target, imageFile) => {

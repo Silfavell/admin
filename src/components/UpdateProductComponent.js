@@ -268,6 +268,8 @@ class UpdateProductComponent extends Component {
                 images: this.setImageIds(this.state.images)
             })
         }
+
+        event.target.value = null
     }
 
     getImageData = (target, imageFile) => {
