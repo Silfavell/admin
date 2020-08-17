@@ -13,7 +13,7 @@ export default () => {
         //    cancel = c
         //})
 
-        if (cookies.get('admin-token')) {
+        if (!config.headers.Authorization && cookies.get('admin-token')) {
             config.headers.Authorization = cookies.get('admin-token')
         }
 

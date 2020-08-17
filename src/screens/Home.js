@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Cookies from 'universal-cookie'
+import axios from 'axios'
+import VanillaToasts from 'vanillatoasts'
 
 import SaveCategoryComponent from '../components/SaveCategoryComponent'
 import UpdateCategoryComponent from '../components/UpdateCategoryComponent'
@@ -47,6 +49,21 @@ class Home extends Component {
     UNSAFE_componentWillMount() {
         if (!cookies.get('admin-token')) {
             this.props.history.push('/login')
+        } else {
+            axios.get(`${process.env.REACT_APP_API_URL}/admin/test`, { headers: { Authorization: cookies.get('admin-token') } }).then(({ status, data }) => {
+                if (status !== 200) {
+                    this.props.history.push('/login')
+                }
+            }).catch(() => {
+                VanillaToasts.create({
+                    title: 'Hatalı Token',
+                    type: 'error',
+                    positionClass: 'topRight',
+                    timeout: 3 * 1000
+                })
+
+                this.props.history.push('/login')
+            })
         }
     }
 
