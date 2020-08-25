@@ -17,7 +17,9 @@ import DeleteProductComponent from '../components/DeleteProductComponent'
 
 import SaveTypeComponent from '../components/SaveTypeComponent'
 import UpdateTypeComponent from '../components/UpdateTypeComponent'
+
 import ListTickets from '../components/ListTickets'
+import ListWaitingComments from '../components/ListWaitingComments'
 
 const cookies = new Cookies()
 
@@ -37,6 +39,7 @@ class Home extends Component {
             case '/update-type': return <UpdateTypeComponent />
 
             case '/list-tickets': return <ListTickets />
+            case '/list-waiting-messages': return <ListWaitingComments />
 
             default: return <SaveProductComponent />
         }
@@ -131,6 +134,7 @@ class Home extends Component {
                             </div>
                             <div className='form-group'>
                                 <button className='btn btn-primary btn-block' name={'list-tickets'} onClick={this.onBtnClick}>Destek Mesajlarını Listele</button>
+                                <button className='btn btn-primary btn-block' name={'list-waiting-messages'} onClick={this.onBtnClick}>Onay Bekleyen Yorumları Listele</button>
                             </div>
                         </div>
                     </div>
