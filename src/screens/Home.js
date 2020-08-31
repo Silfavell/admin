@@ -20,6 +20,7 @@ import UpdateTypeComponent from '../components/UpdateTypeComponent'
 
 import ListTickets from '../components/ListTickets'
 import ListWaitingComments from '../components/ListWaitingComments'
+import ListManagers from '../components/ListMangers'
 
 const cookies = new Cookies()
 
@@ -40,6 +41,7 @@ class Home extends Component {
 
             case '/list-tickets': return <ListTickets />
             case '/list-waiting-messages': return <ListWaitingComments />
+            case '/list-managers': return <ListManagers />
 
             default: return <SaveProductComponent />
         }
@@ -135,6 +137,7 @@ class Home extends Component {
                             <div className='form-group'>
                                 <button className='btn btn-primary btn-block' name={'list-tickets'} onClick={this.onBtnClick}>Destek Mesajlarını Listele</button>
                                 <button className='btn btn-primary btn-block' name={'list-waiting-messages'} onClick={this.onBtnClick}>Onay Bekleyen Yorumları Listele</button>
+                                <button className='btn btn-primary btn-block' name={'list-managers'} onClick={this.onBtnClick}>Yöneticileri Listele</button>
                             </div>
                         </div>
                     </div>
