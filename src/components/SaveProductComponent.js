@@ -228,6 +228,20 @@ class SaveProductComponent extends Component {
         })
     }
 
+    componentDidMount() {
+        document.onpaste = (event) => {
+            let items = (event.clipboardData || event.originalEvent.clipboardData).items
+
+            for (let index in items) {
+                let item = items[index]
+                if (item.kind === 'file') {
+                    this.state.images.push(item.getAsFile())
+                    this.setState({ images: this.setImageIds(this.state.images) })
+                }
+            }
+        }
+    }
+
     render() {
         const {
             categories,
