@@ -9,6 +9,7 @@ import SpecificationInputs from './SpecificationInputs'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
+import ReferenceSelect from '../components/ReferenceSelect'
 
 class UpdateProductComponent extends Component {
 
@@ -64,23 +65,6 @@ class UpdateProductComponent extends Component {
         if (name === 'purchasable')
             value = checked
 
-        const obj = name === 'updateId' ? {
-            categoryId: '',
-            subCategoryId: '',
-            type: '',
-            name: '',
-            details: '',
-            price: '',
-            discountedPrice: '',
-            brand: '',
-            colorGroup: '',
-
-            colorName: '',
-            colorCode: '',
-
-            images: []
-        } : {}
-
         const categoryObj = name === 'categoryId' ? {
             subCategoryId: ''
         } : {}
@@ -110,35 +94,12 @@ class UpdateProductComponent extends Component {
             })
         })
 
-        if (name === 'updateId') {
-            const imageRequests = Array.from(new Array(productObj.imageCount)).map((_, index) => {
-                try {
-                    return this.getImage(productObj.image, index)
-                } catch (error) {
-                    return false
-                }
-            })
-
-            Promise.all(imageRequests).then((images) => {
-                this.setState({
-                    [name]: value,
-                    ...obj,
-                    ...categoryObj,
-                    ...colorGroupObj,
-                    ...productObj,
-                    images: this.setImageIds(images.filter((_) => !!_))
-                })
-            })
-        } else {
-            this.setState({
-                [name]: value,
-                ...obj,
-                ...categoryObj,
-                ...colorGroupObj,
-                ...productObj
-            })
-        }
-
+        this.setState({
+            [name]: value,
+            ...categoryObj,
+            ...colorGroupObj,
+            ...productObj
+        })
     }
 
     changeBrandMode = () => {
@@ -310,11 +271,33 @@ class UpdateProductComponent extends Component {
         }
     }
 
+    onReferenceSelect = state => {
+        const imageRequests = Array.from(new Array(state.imageCount)).map((_, index) => {
+            try {
+                return this.getImage(state.image, index)
+            } catch (error) {
+                return false
+            }
+        })
+
+        Promise.all(imageRequests).then((images) => {
+            this.setState({
+                ...state,
+                images: this.setImageIds(images.filter((_) => !!_))
+            })
+        })
+
+        this.setState(state)
+    }
+
+    onColorGroupSelect = ({ colorGroup }) => {
+        this.setState({ colorGroup })
+    }
+
     render() {
         const {
             updateId,
             categories,
-            productsWithCategories,
             brandMode,
             images,
 
@@ -327,7 +310,6 @@ class UpdateProductComponent extends Component {
             price,
             discountedPrice,
             purchasable,
-            colorGroup,
 
             colorName,
             colorCode
@@ -347,24 +329,10 @@ class UpdateProductComponent extends Component {
                             <div className='d-flex'>
 
                                 <div style={{ flex: 1 }}>
-                                    <select
-                                        type='text'
-                                        className='form-control'
-                                        id='updateId'
-                                        name='updateId'
-                                        onChange={this.onChange}
-                                        value={updateId}>
-                                        <option selected unselectable value={null}>Düzenlemek istediğiniz ürünü seçiniz</option>
-                                        {
-                                            productsWithCategories.map((category) => {
-                                                return category.subCategories.map((subCategory) => {
-                                                    return subCategory.products.map((product) => (
-                                                        <option key={product._id} value={product._id}>{product.name}</option>
-                                                    ))
-                                                })
-                                            })
-                                        }
-                                    </select>
+                                    <ReferenceSelect
+                                        update
+                                        onReferenceSelect={this.onReferenceSelect}
+                                        productsWithCategories={this.state.productsWithCategories} />
                                 </div>
 
                                 <div
@@ -525,28 +493,16 @@ class UpdateProductComponent extends Component {
 
                                 <div className='form-group row'>
                                     <div className='col-md-12'>
-                                        <label htmlFor='colorGroup' className='text-black'>Renk grubu (Referans ürün)</label>
+                                        <label htmlFor='colorGroup' className='text-black'>Benzer Ürün</label>
 
                                         <div className='d-flex'>
 
                                             <div style={{ flex: 1 }}>
-                                                <select
-                                                    type='text'
-                                                    className='form-control'
-                                                    id='colorGroup'
-                                                    name='colorGroup'
-                                                    onChange={this.onChange}
-                                                    value={colorGroup}
-                                                    placeholder='Renk grubu giriniz (Seçili ürünle aynı renk grubu)'>
-                                                    <option selected unselectable value={null}>Renk grubu seçebilirsiniz</option>
-                                                    {
-                                                        productsWithCategories.find((category) => category._id === categoryId)
-                                                            ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
-                                                            ?.products.map((product) => (
-                                                                product.colorGroup && <option value={product._id}>{product.name}</option>
-                                                            ))
-                                                    }
-                                                </select>
+                                                <ReferenceSelect
+                                                    colorGroup
+                                                    onReferenceSelect={this.onColorGroupSelect}
+                                                    productsWithCategories={this.state.productsWithCategories}
+                                                />
                                             </div>
 
                                             <div

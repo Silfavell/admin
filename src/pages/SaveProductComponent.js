@@ -6,6 +6,7 @@ import 'vanillatoasts/vanillatoasts.css'
 
 import DnD from '../screens/DnD'
 import SpecificationInputs from './SpecificationInputs'
+import ReferenceSelect from '../components/ReferenceSelect'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './save-product.scss'
@@ -66,23 +67,6 @@ class SaveProductComponent extends Component {
             value = checked
         }
 
-        const obj = name === 'updateId' ? {
-            categoryId: '',
-            subCategoryId: '',
-            type: '',
-            name: '',
-            details: '',
-            price: '',
-            discountedPrice: '',
-            brand: '',
-            colorGroup: '',
-
-            colorName: '',
-            colorCode: '',
-
-            images: []
-        } : {}
-
         const categoryObj = name === 'categoryId' ? {
             subCategoryId: ''
         } : {}
@@ -111,21 +95,11 @@ class SaveProductComponent extends Component {
             })
         })
 
-        if (name === 'updateId') {
-            this.setState({
-                [name]: value,
-                ...obj,
-                ...categoryObj,
-                ...colorGroupObj,
-                ...productObj
-            })
-        } else {
-            this.setState({
-                [name]: value,
-                ...categoryObj,
-                ...colorGroupObj
-            })
-        }
+        this.setState({
+            [name]: value,
+            ...categoryObj,
+            ...colorGroupObj
+        })
     }
 
     changeBrandMode = () => {
@@ -290,11 +264,61 @@ class SaveProductComponent extends Component {
         }
     }
 
+    onReferenceChange = ({ value }) => {
+        const obj = {
+            categoryId: '',
+            subCategoryId: '',
+            type: '',
+            name: '',
+            details: '',
+            price: '',
+            discountedPrice: '',
+            brand: '',
+            colorGroup: '',
+
+            colorName: '',
+            colorCode: '',
+
+            images: []
+        }
+
+        let productObj = {}
+
+        // eslint-disable-next-line
+        this.state.productsWithCategories.map((category) => {
+            // eslint-disable-next-line
+            category.subCategories.map((subCategory) => {
+                // eslint-disable-next-line
+                subCategory.products.map((product) => {
+                    if (product._id === value) {
+                        productObj = product
+                        product.colorGroup = product.color ? product.colorGroup : null
+
+                        productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
+                        delete productObj.name
+                    }
+                })
+            })
+        })
+
+        this.setState({
+            updateId: value,
+            ...obj,
+            ...productObj
+        })
+    }
+
+    onReferenceSelect = state => {
+        this.setState(state)
+    }
+
+    onColorGroupSelect = ({ colorGroup }) => {
+        this.setState({ colorGroup })
+    }
+
     render() {
         const {
-            updateId,
             categories,
-            productsWithCategories,
             brandMode,
             images,
 
@@ -307,7 +331,6 @@ class SaveProductComponent extends Component {
             price,
             discountedPrice,
             purchasable,
-            colorGroup,
 
             colorName,
             colorCode
@@ -325,24 +348,9 @@ class SaveProductComponent extends Component {
                         <div className='col-md-12'>
                             <label htmlFor='updateId' className='text-black'>Referans Ürün <span className='text-danger'>*</span></label>
 
-                            <select
-                                type='text'
-                                className='form-control'
-                                id='updateId'
-                                name='updateId'
-                                onChange={this.onChange}
-                                value={updateId}>
-                                <option selected unselectable value={null}>Referans Ürün Seçiniz</option>
-                                {
-                                    productsWithCategories.map((category) => {
-                                        return category.subCategories.map((subCategory) => {
-                                            return subCategory.products.map((product) => (
-                                                <option key={product._id} value={product._id}>{product.name}</option>
-                                            ))
-                                        })
-                                    })
-                                }
-                            </select>
+                            <ReferenceSelect
+                                onReferenceSelect={this.onReferenceSelect}
+                                productsWithCategories={this.state.productsWithCategories} />
                         </div>
                     </div>
 
@@ -496,23 +504,11 @@ class SaveProductComponent extends Component {
                             <div className='d-flex'>
 
                                 <div style={{ flex: 1 }}>
-                                    <select
-                                        type='text'
-                                        className='form-control'
-                                        id='colorGroup'
-                                        name='colorGroup'
-                                        onChange={this.onChange}
-                                        value={colorGroup}
-                                        placeholder='Renk grubu giriniz (Seçili ürünle aynı renk grubu)'>
-                                        <option selected unselectable value={null}>Benzer Ürünü seçiniz (Renk)</option>
-                                        {
-                                            productsWithCategories.find((category) => category._id === categoryId)
-                                                ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
-                                                ?.products.map((product) => (
-                                                    product.colorGroup && <option value={product.colorGroup}>{product.name}</option>
-                                                ))
-                                        }
-                                    </select>
+                                    <ReferenceSelect
+                                        colorGroup
+                                        onReferenceSelect={this.onColorGroupSelect}
+                                        productsWithCategories={this.state.productsWithCategories}
+                                    />
                                 </div>
 
                                 <div
