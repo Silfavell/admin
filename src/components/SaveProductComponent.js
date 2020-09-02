@@ -101,7 +101,6 @@ class SaveProductComponent extends Component {
                 // eslint-disable-next-line
                 subCategory.products.map((product) => {
                     if (product._id === value) {
-                        console.log(product)
                         productObj = product
                         product.colorGroup = product.color ? product.colorGroup : null
 
