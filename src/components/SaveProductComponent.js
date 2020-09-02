@@ -20,6 +20,8 @@ class SaveProductComponent extends Component {
         productsWithCategories: [],
         brandMode: 0,
 
+        updateId: '',
+
         categoryId: '',
         subCategoryId: '',
         type: '',
@@ -46,9 +48,9 @@ class SaveProductComponent extends Component {
     )
 
     getImage = (imagePath, index) => {
-        return axios.get(`http://localhost:3000/static?folder=products&image=${imagePath}-${index}.webp`, { responseType: 'blob' }).then(({ data }) => {
+        return axios.get(`${process.env.REACT_APP_API_URL}/static?folder=products&image=${imagePath}-${index}.webp`, { responseType: 'blob' }).then(({ data }) => {
             return data
-        })
+        }).catch(() => null)
     }
 
     UNSAFE_componentWillMount() {
@@ -60,8 +62,26 @@ class SaveProductComponent extends Component {
     onChange = (event) => {
         let { name, value, checked } = event.target
 
-        if (name === 'purchasable')
+        if (name === 'purchasable') {
             value = checked
+        }
+
+        const obj = name === 'updateId' ? {
+            categoryId: '',
+            subCategoryId: '',
+            type: '',
+            name: '',
+            details: '',
+            price: '',
+            discountedPrice: '',
+            brand: '',
+            colorGroup: '',
+
+            colorName: '',
+            colorCode: '',
+
+            images: []
+        } : {}
 
         const categoryObj = name === 'categoryId' ? {
             subCategoryId: ''
@@ -72,12 +92,41 @@ class SaveProductComponent extends Component {
             colorCode: ''
         } : {}
 
-        this.setState({
-            [name]: value,
-            ...categoryObj,
-            ...colorGroupObj
+        let productObj = {}
+
+        // eslint-disable-next-line
+        this.state.productsWithCategories.map((category) => {
+            // eslint-disable-next-line
+            category.subCategories.map((subCategory) => {
+                // eslint-disable-next-line
+                subCategory.products.map((product) => {
+                    if (product._id === value) {
+                        console.log(product)
+                        productObj = product
+                        product.colorGroup = product.color ? product.colorGroup : null
+
+                        productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
+                        delete productObj.name
+                    }
+                })
+            })
         })
 
+        if (name === 'updateId') {
+            this.setState({
+                [name]: value,
+                ...obj,
+                ...categoryObj,
+                ...colorGroupObj,
+                ...productObj
+            })
+        } else {
+            this.setState({
+                [name]: value,
+                ...categoryObj,
+                ...colorGroupObj
+            })
+        }
     }
 
     changeBrandMode = () => {
@@ -244,6 +293,7 @@ class SaveProductComponent extends Component {
 
     render() {
         const {
+            updateId,
             categories,
             productsWithCategories,
             brandMode,
@@ -271,6 +321,32 @@ class SaveProductComponent extends Component {
         return (
             <div className='p-3 border'>
                 <div className='col-md-12'>
+
+                    <div className='form-group row'>
+                        <div className='col-md-12'>
+                            <label htmlFor='updateId' className='text-black'>Referans Ürün <span className='text-danger'>*</span></label>
+
+                            <select
+                                type='text'
+                                className='form-control'
+                                id='updateId'
+                                name='updateId'
+                                onChange={this.onChange}
+                                value={updateId}>
+                                <option selected unselectable value={null}>Referans Ürün Seçiniz</option>
+                                {
+                                    productsWithCategories.map((category) => {
+                                        return category.subCategories.map((subCategory) => {
+                                            return subCategory.products.map((product) => (
+                                                <option key={product._id} value={product._id}>{product.name}</option>
+                                            ))
+                                        })
+                                    })
+                                }
+                            </select>
+                        </div>
+                    </div>
+
                     <div className='form-group row'>
 
                         <div className='col-md-6'>
@@ -416,7 +492,7 @@ class SaveProductComponent extends Component {
 
                     <div className='form-group row'>
                         <div className='col-md-12'>
-                            <label htmlFor='colorGroup' className='text-black'>Renk grubu (Referans ürün)</label>
+                            <label htmlFor='colorGroup' className='text-black'>Benzer Ürün</label>
 
                             <div className='d-flex'>
 
@@ -429,7 +505,7 @@ class SaveProductComponent extends Component {
                                         onChange={this.onChange}
                                         value={colorGroup}
                                         placeholder='Renk grubu giriniz (Seçili ürünle aynı renk grubu)'>
-                                        <option selected unselectable value={null}>Renk grubu seçebilirsiniz</option>
+                                        <option selected unselectable value={null}>Benzer Ürünü seçiniz (Renk)</option>
                                         {
                                             productsWithCategories.find((category) => category._id === categoryId)
                                                 ?.subCategories.find((subCategory) => subCategory._id === subCategoryId)
@@ -477,7 +553,13 @@ class SaveProductComponent extends Component {
                     </div>
 
                     {
-                        selectedType && <SpecificationInputs key={selectedType._id} ref={this.specificationsRef} selectedType={selectedType} />
+                        selectedType && (
+                            <SpecificationInputs
+                                specifications={this.state.specifications}
+                                key={selectedType._id}
+                                ref={this.specificationsRef}
+                                selectedType={selectedType} />
+                        )
                     }
 
                     <div className='form-group row'>

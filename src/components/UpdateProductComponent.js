@@ -586,11 +586,13 @@ class UpdateProductComponent extends Component {
                                 </div>
 
                                 {
-                                    selectedType && <SpecificationInputs
-                                        specifications={this.state.specifications}
-                                        key={selectedType._id}
-                                        ref={this.specificationsRef}
-                                        selectedType={selectedType} />
+                                    selectedType && (
+                                        <SpecificationInputs
+                                            specifications={this.state.specifications}
+                                            key={selectedType._id}
+                                            ref={this.specificationsRef}
+                                            selectedType={selectedType} />
+                                    )
                                 }
 
                                 <div className='form-group row'>
