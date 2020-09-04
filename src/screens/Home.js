@@ -3,24 +3,24 @@ import Cookies from 'universal-cookie'
 import axios from 'axios'
 import VanillaToasts from 'vanillatoasts'
 
-import SaveCategoryComponent from '../components/SaveCategoryComponent'
-import UpdateCategoryComponent from '../components/UpdateCategoryComponent'
-import DeleteCategoryComponent from '../components/DeleteCategoryComponent'
+import SaveCategoryComponent from '../pages/SaveCategoryComponent'
+import UpdateCategoryComponent from '../pages/UpdateCategoryComponent'
+import DeleteCategoryComponent from '../pages/DeleteCategoryComponent'
 
-import SaveSubCategoryComponent from '../components/SaveSubCategoryComponent'
-import UpdateSubCategoryComponent from '../components/UpdateSubCategoryComponent'
-import DeleteSubCategoryComponent from '../components/DeleteSubCategoryComponent'
+import SaveSubCategoryComponent from '../pages/SaveSubCategoryComponent'
+import UpdateSubCategoryComponent from '../pages/UpdateSubCategoryComponent'
+import DeleteSubCategoryComponent from '../pages/DeleteSubCategoryComponent'
 
-import SaveProductComponent from '../components/SaveProductComponent'
-import UpdateProductComponent from '../components/UpdateProductComponent'
-import DeleteProductComponent from '../components/DeleteProductComponent'
+import SaveProductComponent from '../pages/SaveProductComponent'
+import UpdateProductComponent from '../pages/UpdateProductComponent'
+import DeleteProductComponent from '../pages/DeleteProductComponent'
 
-import SaveTypeComponent from '../components/SaveTypeComponent'
-import UpdateTypeComponent from '../components/UpdateTypeComponent'
+import SaveTypeComponent from '../pages/SaveTypeComponent'
+import UpdateTypeComponent from '../pages/UpdateTypeComponent'
 
-import ListTickets from '../components/ListTickets'
-import ListWaitingComments from '../components/ListWaitingComments'
-import ListManagers from '../components/ListMangers'
+import ListTickets from '../pages/ListTickets'
+import ListWaitingComments from '../pages/ListWaitingComments'
+import ListManagers from '../pages/ListMangers'
 
 const cookies = new Cookies()
 
