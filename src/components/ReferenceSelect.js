@@ -44,26 +44,25 @@ class ReferenceSelect extends Component {
         if (option) {
             let productObj = this.getSelectedProduct(option.value)
 
-            this.props.onReferenceSelect({
-                updateId: option.value,
-                ...obj,
-                ...productObj
-            })
+            if (this.props.update) {
+                this.props.onReferenceSelect({
+                    updateId: option.value,
+                    ...obj,
+                    ...productObj,
+                    colorName: productObj.color?.name ?? '',
+                    colorCode: productObj.color?.code ?? ''
+                })
+            } else {
+                this.props.onReferenceSelect({
+                    updateId: option.value,
+                    ...obj,
+                    ...productObj
+                })
+            }
         } else {
             this.props.onReferenceSelect({
                 updateId: '',
-                categoryId: '',
-                subCategoryId: '',
-                type: '',
-                name: '',
-                details: '',
-                price: '',
-                discountedPrice: '',
-                brand: '',
-                purchasable: true,
-                colorGroup: '',
-                colorName: '',
-                colorCode: ''
+                ...obj
             })
         }
     }

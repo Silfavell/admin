@@ -194,6 +194,7 @@ class SaveProductComponent extends Component {
                     })
 
                     this.setState({
+                        updateId: '',
                         categoryId: '',
                         subCategoryId: '',
                         type: '',
