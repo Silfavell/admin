@@ -118,8 +118,8 @@ class SaveProductComponent extends Component {
 
         const formData = new FormData()
         // eslint-disable-next-line
-        images.map((image, index) => {
-            formData.append('image-' + index, image)
+        images.map((image) => {
+            formData.append('images', image)
         })
 
         if (this.specificationsRef.current) {
