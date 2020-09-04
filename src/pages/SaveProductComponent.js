@@ -169,8 +169,8 @@ class SaveProductComponent extends Component {
         }
 
         if (brand.length > 0) formData.append('brand', brand)
-        if (price.length > 0) formData.append('price', price)
-        if (discountedPrice.length > 0) formData.append('discountedPrice', discountedPrice)
+        if (price.toString().length > 0) formData.append('price', price)
+        if (discountedPrice.toString().length > 0) formData.append('discountedPrice', discountedPrice)
         formData.append('purchasable', purchasable)
 
         return formData
@@ -331,6 +331,7 @@ class SaveProductComponent extends Component {
             price,
             discountedPrice,
             purchasable,
+            colorGroup,
 
             colorName,
             colorCode
@@ -505,7 +506,8 @@ class SaveProductComponent extends Component {
 
                                 <div style={{ flex: 1 }}>
                                     <ReferenceSelect
-                                        colorGroup
+                                        key={colorGroup}
+                                        colorGroup={colorGroup}
                                         onReferenceSelect={this.onColorGroupSelect}
                                         productsWithCategories={this.state.productsWithCategories}
                                     />

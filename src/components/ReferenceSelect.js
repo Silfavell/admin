@@ -42,25 +42,7 @@ class ReferenceSelect extends Component {
         }
 
         if (option) {
-            let productObj = {}
-
-            // eslint-disable-next-line
-            this.props.productsWithCategories.map((category) => {
-                // eslint-disable-next-line
-                category.subCategories.map((subCategory) => {
-                    // eslint-disable-next-line
-                    subCategory.products.map((product) => {
-                        if (product._id === option.value) {
-                            productObj = Object.assign({}, product)
-
-                            if (!this.props.update) {
-                                productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
-                                delete productObj.name
-                            }
-                        }
-                    })
-                })
-            })
+            let productObj = this.getSelectedProduct(option.value)
 
             this.props.onReferenceSelect({
                 updateId: option.value,
@@ -86,12 +68,56 @@ class ReferenceSelect extends Component {
         }
     }
 
+    getSelectedProduct = (_id, colorGroup) => {
+        // eslint-disable-next-line
+        return this.props.productsWithCategories.map((category) => {
+            // eslint-disable-next-line
+            return category.subCategories.map((subCategory) => {
+                // eslint-disable-next-line
+                return subCategory.products.map((product) => {
+                    if (colorGroup) {
+                        if (product.colorGroup === _id) {
+                            let productObj = Object.assign({}, product)
+
+                            return productObj
+                        }
+                    } else {
+                        if (product._id === _id) {
+                            let productObj = Object.assign({}, product)
+
+                            if (!this.props.update) {
+                                productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
+                                delete productObj.name
+                            }
+
+                            return productObj
+                        }
+                    }
+                })
+            })
+        }).reduce((p, c) => [...p, ...c], []).reduce((p, c) => [...p, ...c], []).find((el) => !!el)
+    }
+
+    getDefaultValue = () => {
+        if (this.props.colorGroup) {
+            const product = this.getSelectedProduct(this.props.colorGroup, true)
+
+            return ({
+                label: product.name,
+                value: product._id
+            })
+        }
+
+        return null
+    }
+
     render() {
         return (
             <Select
                 onChange={this.onReferenceChange}
                 isSearchable
                 isClearable
+                defaultValue={this.getDefaultValue()}
                 options={this.getOptions()} />
         )
     }

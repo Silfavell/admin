@@ -310,6 +310,7 @@ class UpdateProductComponent extends Component {
             price,
             discountedPrice,
             purchasable,
+            colorGroup,
 
             colorName,
             colorCode
@@ -499,7 +500,8 @@ class UpdateProductComponent extends Component {
 
                                             <div style={{ flex: 1 }}>
                                                 <ReferenceSelect
-                                                    colorGroup
+                                                    key={colorGroup}
+                                                    colorGroup={colorGroup}
                                                     onReferenceSelect={this.onColorGroupSelect}
                                                     productsWithCategories={this.state.productsWithCategories}
                                                 />
