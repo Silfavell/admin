@@ -13,7 +13,7 @@ import DeleteSubCategoryComponent from '../pages/DeleteSubCategoryComponent'
 
 import SaveProductComponent from '../pages/SaveProductComponent'
 import UpdateProductComponent from '../pages/UpdateProductComponent'
-import DeleteProductComponent from '../pages/DeleteProductComponent'
+// import DeleteProductComponent from '../pages/DeleteProductComponent'
 
 import SaveTypeComponent from '../pages/SaveTypeComponent'
 import UpdateTypeComponent from '../pages/UpdateTypeComponent'
@@ -35,7 +35,7 @@ class Home extends Component {
             case '/delete-sub-category': return <DeleteSubCategoryComponent />
             case '/save-product': return <SaveProductComponent />
             case '/update-product': return <UpdateProductComponent />
-            case '/delete-product': return <DeleteProductComponent />
+            // case '/delete-product': return <DeleteProductComponent />
             case '/save-type': return <SaveTypeComponent />
             case '/update-type': return <UpdateTypeComponent />
 
@@ -117,9 +117,11 @@ class Home extends Component {
                             <div className='form-group'>
                                 <button className='btn btn-primary btn-block' name={'update-product'} onClick={this.onBtnClick}>Ürün Güncelle</button>
                             </div>
-                            <div className='form-group'>
-                                <button className='btn btn-primary btn-block' name={'delete-product'} onClick={this.onBtnClick}>Ürün Sil</button>
-                            </div>
+                            {
+                                //  <div className='form-group'>
+                                //      <button className='btn btn-primary btn-block' name={'delete-product'} onClick={this.onBtnClick}>Ürün Sil</button>
+                                //  </div>
+                            }
 
                             <div className='form-group my-4'>
                                 <h3>Ürün Tipi</h3>
