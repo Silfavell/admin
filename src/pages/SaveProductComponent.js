@@ -150,27 +150,33 @@ class SaveProductComponent extends Component {
                     name: curVal,
                     value: this.specificationsRef.current.state[curVal]
                 }, ...prevVal]
-            }, [])
+            }, []).filter((spec) => {
+                if (spec.value.trim().length > 0) {
+                    return true
+                }
+
+                return false
+            })
 
             if (specifications.length > 0) formData.append('specifications', JSON.stringify(specifications))
         }
 
-        if (categoryId.length > 0) formData.append('categoryId', categoryId)
-        if (subCategoryId.length > 0) formData.append('subCategoryId', subCategoryId)
-        if (type.length > 0) formData.append('type', type)
-        if (name.length > 0) formData.append('name', name)
-        if (details.length > 0) formData.append('details', details)
-        if (colorGroup.length > 0) formData.append('colorGroup', colorGroup)
-        if (colorName.length > 0 && colorCode.length > 0) {
+        if (categoryId.trim().length > 0) formData.append('categoryId', categoryId)
+        if (subCategoryId.trim().length > 0) formData.append('subCategoryId', subCategoryId)
+        if (type.trim().length > 0) formData.append('type', type)
+        if (name.trim().length > 0) formData.append('name', name)
+        if (details.trim().length > 0) formData.append('details', details)
+        if (colorGroup.trim().length > 0) formData.append('colorGroup', colorGroup)
+        if (colorName.trim().length > 0 && colorCode.length > 0) {
             formData.append('color', JSON.stringify({
                 name: colorName,
                 code: colorCode
             }))
         }
 
-        if (brand.length > 0) formData.append('brand', brand)
-        if (price.toString().length > 0) formData.append('price', price)
-        if (discountedPrice.toString().length > 0) formData.append('discountedPrice', discountedPrice)
+        if (brand.trim().length > 0) formData.append('brand', brand)
+        if (price.toString().trim().length > 0) formData.append('price', price)
+        if (discountedPrice.toString().trim().length > 0) formData.append('discountedPrice', discountedPrice)
         formData.append('purchasable', purchasable)
 
         return formData
