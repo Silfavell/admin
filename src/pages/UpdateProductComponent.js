@@ -107,7 +107,7 @@ class UpdateProductComponent extends Component {
     }
 
     onRemoveColorGroupClick = () => {
-        this.setState({ colorGroup: '' })
+        this.setState({ colorGroup: this.state.updateId })
     }
 
     onRemoveUpdateIdClick = () => {
@@ -291,9 +291,9 @@ class UpdateProductComponent extends Component {
                 ...state,
                 images: this.setImageIds(images.filter((_) => !!_))
             })
+        }).catch(() => {
+            this.setState(state)
         })
-
-        this.setState(state)
     }
 
     onColorGroupSelect = ({ colorGroup }) => {

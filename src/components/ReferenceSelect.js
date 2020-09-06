@@ -101,10 +101,12 @@ class ReferenceSelect extends Component {
         if (this.props.colorGroup) {
             const product = this.getSelectedProduct(this.props.colorGroup, true)
 
-            return ({
-                label: product.name,
-                value: product._id
-            })
+            if (product) {
+                return ({
+                    label: product.name,
+                    value: product._id
+                })
+            }
         }
 
         return null
