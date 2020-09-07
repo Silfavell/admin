@@ -154,7 +154,7 @@ class UpdateProductComponent extends Component {
             const specifications = Object.keys(this.specificationsRef.current.state).reduce((prevVal, curVal) => {
                 return [{
                     name: curVal,
-                    value: this.specificationsRef.current.state[curVal]
+                    value: this.specificationsRef.current.state[curVal].trim()
                 }, ...prevVal]
             }, []).filter((spec) => {
                 if (spec.value.trim().length > 0) {
@@ -167,19 +167,19 @@ class UpdateProductComponent extends Component {
             if (specifications.length > 0) formData.append('specifications', JSON.stringify(specifications))
         }
 
-        if (categoryId.trim().length > 0) formData.append('categoryId', categoryId)
-        if (subCategoryId.trim().length > 0) formData.append('subCategoryId', subCategoryId)
-        if (type.trim().length > 0) formData.append('type', type)
-        if (name.trim().length > 0) formData.append('name', name)
-        if (details.trim().length > 0) formData.append('details', details)
-        if (colorGroup?.trim().length > 0) formData.append('colorGroup', colorGroup)
-        if (colorName?.trim().length > 0 && colorCode?.length > 0) formData.append('color', JSON.stringify({
-            name: colorName,
-            code: colorCode
+        if (categoryId.trim().length > 0) formData.append('categoryId', categoryId.trim())
+        if (subCategoryId.trim().length > 0) formData.append('subCategoryId', subCategoryId.trim())
+        if (type.trim().length > 0) formData.append('type', type.trim())
+        if (name.trim().length > 0) formData.append('name', name.trim())
+        if (details.trim().length > 0) formData.append('details', details.trim())
+        if (colorGroup?.trim().length > 0) formData.append('colorGroup', colorGroup.trim())
+        if (colorName?.trim().length > 0 && colorCode?.trim().length > 0) formData.append('color', JSON.stringify({
+            name: colorName.trim(),
+            code: colorCode.trim()
         }))
-        if (brand.trim().length > 0) formData.append('brand', brand)
-        if (price.toString().trim().length > 0) formData.append('price', price)
-        if (discountedPrice.toString().trim().length > 0) formData.append('discountedPrice', discountedPrice)
+        if (brand.trim().length > 0) formData.append('brand', brand.trim())
+        if (price.toString().trim().length > 0) formData.append('price', price.trim())
+        if (discountedPrice.toString().trim().length > 0) formData.append('discountedPrice', discountedPrice.trim())
         formData.append('purchasable', purchasable)
 
         return formData
