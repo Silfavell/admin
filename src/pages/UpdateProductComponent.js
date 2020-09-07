@@ -178,8 +178,8 @@ class UpdateProductComponent extends Component {
             code: colorCode.trim()
         }))
         if (brand.trim().length > 0) formData.append('brand', brand.trim())
-        if (price.toString().trim().length > 0) formData.append('price', price.trim())
-        if (discountedPrice.toString().trim().length > 0) formData.append('discountedPrice', discountedPrice.trim())
+        if (price.toString().trim().length > 0) formData.append('price', price.toString().trim())
+        if (discountedPrice.toString().trim().length > 0) formData.append('discountedPrice', discountedPrice.toString().trim())
         formData.append('purchasable', purchasable)
 
         return formData
