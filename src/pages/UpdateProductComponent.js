@@ -567,6 +567,7 @@ class UpdateProductComponent extends Component {
                                             className='form-control'
                                             id='details'
                                             name='details'
+                                            rows={5}
                                             placeholder='Ürün detayını giriniz'
                                             onChange={this.onChange}
                                             value={details} />
