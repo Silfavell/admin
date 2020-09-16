@@ -323,6 +323,14 @@ class SaveProductComponent extends Component {
         this.setState({ colorGroup })
     }
 
+    getColorByCode = () => {
+        if (this.state.colorCode.length === 7) {
+            return this.state.colorCode
+        }
+
+        return 'white'
+    }
+
     render() {
         const {
             categories,
@@ -545,14 +553,21 @@ class SaveProductComponent extends Component {
                         </div>
                         <div className='col-md-6'>
                             <label htmlFor='colorCode' className='text-black'>Renk kodu</label>
-                            <input
-                                type='text'
-                                className='form-control'
-                                id='colorCode'
-                                name='colorCode'
-                                onChange={this.onChange}
-                                value={colorCode}
-                                placeholder='Renk kodu giriniz' />
+                            <div class='input-group'>
+                                <input
+                                    type='text'
+                                    className='form-control'
+                                    id='colorCode'
+                                    name='colorCode'
+                                    onChange={this.onChange}
+                                    value={colorCode}
+                                    placeholder='Renk kodu giriniz' />
+                                <div class='input-group-append'>
+                                    <div class='input-group-text bg-white'>
+                                        <span className='border' style={{ width: 24, height: 24, backgroundColor: this.getColorByCode() }} />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
