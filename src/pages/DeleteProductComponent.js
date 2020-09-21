@@ -9,17 +9,17 @@ import './save-product.scss'
 class DeleteProductComponent extends Component {
 
     state = {
-        productsWithCategories: [],
+        products: [],
         deleteId: ''
     }
 
-    getProductsWithCategories = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/products-with-categories`).then(({ data, status }) => data)
+    getProducts = () => (
+        axios.get(`${process.env.REACT_APP_API_URL}/products`).then(({ data, status }) => data)
     )
 
     UNSAFE_componentWillMount() {
-        this.getProductsWithCategories().then((productsWithCategories) => {
-            this.setState({ productsWithCategories })
+        this.getProducts().then((products) => {
+            this.setState({ products })
         })
     }
 
@@ -60,7 +60,7 @@ class DeleteProductComponent extends Component {
     render() {
         const {
             deleteId,
-            productsWithCategories
+            products
         } = this.state
 
         return (
@@ -82,13 +82,9 @@ class DeleteProductComponent extends Component {
                                         value={deleteId}>
                                         <option selected unselectable value={null}>Silmek istediğiniz ürünü seçiniz</option>
                                         {
-                                            productsWithCategories.map((category) => {
-                                                return category.subCategories.map((subCategory) => {
-                                                    return subCategory.products.map((product) => (
-                                                        <option value={product._id}>{product.name}</option>
-                                                    ))
-                                                })
-                                            })
+                                            this.state.products.map((product) => (
+                                                <option value={product._id}>{product.name}</option>
+                                            ))
                                         }
                                     </select>
                                 </div>

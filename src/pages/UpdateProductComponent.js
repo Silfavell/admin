@@ -17,7 +17,7 @@ class UpdateProductComponent extends Component {
 
     state = {
         categories: [],
-        productsWithCategories: [],
+        products: [],
         brandMode: 0,
 
         updateId: '',
@@ -43,8 +43,8 @@ class UpdateProductComponent extends Component {
         axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
     )
 
-    getProductsWithCategories = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/products-with-categories`).then(({ data, status }) => data)
+    getProducts = () => (
+        axios.get(`${process.env.REACT_APP_API_URL}/products`).then(({ data, status }) => data)
     )
 
     getImage = (imagePath, index) => {
@@ -54,8 +54,8 @@ class UpdateProductComponent extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        Promise.all([this.getCategories(), this.getProductsWithCategories()]).then((vals) => {
-            this.setState({ categories: vals[0], productsWithCategories: vals[1] })
+        Promise.all([this.getCategories(), this.getProducts()]).then((vals) => {
+            this.setState({ categories: vals[0], products: vals[1] })
         })
     }
 
@@ -77,21 +77,15 @@ class UpdateProductComponent extends Component {
         let productObj = {}
 
         // eslint-disable-next-line
-        this.state.productsWithCategories.map((category) => {
-            // eslint-disable-next-line
-            category.subCategories.map((subCategory) => {
-                // eslint-disable-next-line
-                subCategory.products.map((product) => {
-                    if (product._id === value) {
-                        productObj = product
-                        product.colorGroup = product.color ? product.colorGroup : null
-                        productObj.colorCode = product.color?.code ?? null
-                        productObj.colorName = product.color?.name ?? null
+        this.state.products.map((product) => {
+            if (product._id === value) {
+                productObj = product
+                product.colorGroup = product.color ? product.colorGroup : null
+                productObj.colorCode = product.color?.code ?? null
+                productObj.colorName = product.color?.name ?? null
 
-                        productObj.specs = product.specifications
-                    }
-                })
-            })
+                productObj.specs = product.specifications
+            }
         })
 
         this.setState({
@@ -339,7 +333,7 @@ class UpdateProductComponent extends Component {
                                     <ReferenceSelect
                                         update
                                         onReferenceSelect={this.onReferenceSelect}
-                                        productsWithCategories={this.state.productsWithCategories} />
+                                        products={this.state.products} />
                                 </div>
 
                                 <div
@@ -509,7 +503,7 @@ class UpdateProductComponent extends Component {
                                                     key={colorGroup}
                                                     colorGroup={colorGroup}
                                                     onReferenceSelect={this.onColorGroupSelect}
-                                                    productsWithCategories={this.state.productsWithCategories}
+                                                    products={this.state.products}
                                                 />
                                             </div>
 

@@ -18,7 +18,7 @@ class SaveProductComponent extends Component {
 
     state = {
         categories: [],
-        productsWithCategories: [],
+        products: [],
         brandMode: 0,
 
         updateId: '',
@@ -44,8 +44,8 @@ class SaveProductComponent extends Component {
         axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
     )
 
-    getProductsWithCategories = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/products-with-categories`).then(({ data, status }) => data)
+    getProducts = () => (
+        axios.get(`${process.env.REACT_APP_API_URL}/products`).then(({ data, status }) => data)
     )
 
     getImage = (imagePath, index) => {
@@ -55,8 +55,8 @@ class SaveProductComponent extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        Promise.all([this.getCategories(), this.getProductsWithCategories()]).then((vals) => {
-            this.setState({ categories: vals[0], productsWithCategories: vals[1] })
+        Promise.all([this.getCategories(), this.getProducts()]).then((vals) => {
+            this.setState({ categories: vals[0], products: vals[1] })
         })
     }
 
@@ -79,20 +79,14 @@ class SaveProductComponent extends Component {
         let productObj = {}
 
         // eslint-disable-next-line
-        this.state.productsWithCategories.map((category) => {
-            // eslint-disable-next-line
-            category.subCategories.map((subCategory) => {
-                // eslint-disable-next-line
-                subCategory.products.map((product) => {
-                    if (product._id === value) {
-                        productObj = product
-                        product.colorGroup = product.color ? product.colorGroup : null
+        this.state.products.map((product) => {
+            if (product._id === value) {
+                productObj = product
+                product.colorGroup = product.color ? product.colorGroup : null
 
-                        productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
-                        delete productObj.name
-                    }
-                })
-            })
+                productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
+                delete productObj.name
+            }
         })
 
         this.setState({
@@ -292,20 +286,14 @@ class SaveProductComponent extends Component {
         let productObj = {}
 
         // eslint-disable-next-line
-        this.state.productsWithCategories.map((category) => {
-            // eslint-disable-next-line
-            category.subCategories.map((subCategory) => {
-                // eslint-disable-next-line
-                subCategory.products.map((product) => {
-                    if (product._id === value) {
-                        productObj = product
-                        product.colorGroup = product.color ? product.colorGroup : null
+        this.state.products.map((product) => {
+            if (product._id === value) {
+                productObj = product
+                product.colorGroup = product.color ? product.colorGroup : null
 
-                        productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
-                        delete productObj.name
-                    }
-                })
-            })
+                productObj.specifications = product.specifications.filter((spec) => spec.name !== 'Renk Tonu')
+                delete productObj.name
+            }
         })
 
         this.setState({
@@ -366,7 +354,7 @@ class SaveProductComponent extends Component {
 
                             <ReferenceSelect
                                 onReferenceSelect={this.onReferenceSelect}
-                                productsWithCategories={this.state.productsWithCategories} />
+                                products={this.state.products} />
                         </div>
                     </div>
 
@@ -524,7 +512,7 @@ class SaveProductComponent extends Component {
                                         key={colorGroup}
                                         colorGroup={colorGroup}
                                         onReferenceSelect={this.onColorGroupSelect}
-                                        productsWithCategories={this.state.productsWithCategories}
+                                        products={this.state.products}
                                     />
                                 </div>
 
