@@ -34,7 +34,7 @@ class UpdateTypeComponent extends Component {
             this.setState({
                 typeId: value,
                 name: selectedType.name,
-                specifications: selectedType.specifications
+                specifications: selectedType.specifications.join(',')
             })
         } else {
             this.setState({ [name]: value })

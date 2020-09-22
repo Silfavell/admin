@@ -272,22 +272,24 @@ class UpdateProductComponent extends Component {
     }
 
     onReferenceSelect = state => {
-        const imageRequests = Array.from(new Array(state.imageCount)).map((_, index) => {
-            try {
-                return this.getImage(state.image, index)
-            } catch (error) {
-                return false
-            }
-        })
-
-        Promise.all(imageRequests).then((images) => {
-            this.setState({
-                ...state,
-                images: this.setImageIds(images.filter((_) => !!_))
+        if (state.updateId) {
+            const imageRequests = Array.from(new Array(state.imageCount)).map((_, index) => {
+                try {
+                    return this.getImage(state.image, index)
+                } catch (error) {
+                    return false
+                }
             })
-        }).catch(() => {
-            this.setState(state)
-        })
+
+            Promise.all(imageRequests).then((images) => {
+                this.setState({
+                    ...state,
+                    images: this.setImageIds(images.filter((_) => !!_))
+                })
+            }).catch(() => {
+                this.setState(state)
+            })
+        }
     }
 
     onColorGroupSelect = ({ colorGroup }) => {
