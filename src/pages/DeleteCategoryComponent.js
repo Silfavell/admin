@@ -34,7 +34,7 @@ class DeleteCategoryComponent extends Component {
     onDeleteClick = () => {
         if (this.state.categoryId.length > 0) {
             if (window.confirm(`Seçili kategoriyi silmek istediğinize emin misiniz?`)) {
-                axios.delete(`${process.env.REACT_APP_API_URL}/admin/category/${this.state.categoryId}`).then(({ status }) => {
+                axios.delete(`${process.env.REACT_APP_API_URL}/categories/${this.state.categoryId}`).then(({ status }) => {
                     if (status === 200) {
                         VanillaToasts.create({
                             title: 'Kategori silindi',

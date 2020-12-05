@@ -40,15 +40,15 @@ class UpdateProductComponent extends Component {
     }
 
     getCategories = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/categories`).then(({ data, status }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/categories/as-map`).then(({ data, status }) => data)
     )
 
     getProducts = () => (
         axios.get(`${process.env.REACT_APP_API_URL}/products`).then(({ data, status }) => data)
     )
 
-    getImage = (imagePath, index) => {
-        return axios.get(`${process.env.REACT_APP_API_URL}/static?folder=products&image=${imagePath}-${index}.webp`, { responseType: 'blob' }).then(({ data }) => {
+    getImage = (slug, index) => {
+        return axios.get(`${process.env.REACT_APP_API_URL}/static?folder=products&image=${slug}_${index}_940x940.webp`, { responseType: 'blob' }).then(({ data }) => {
             return data
         }).catch(() => null)
     }
@@ -183,7 +183,7 @@ class UpdateProductComponent extends Component {
         if (window.confirm(`${this.state.name} isimli ürünü güncellemek istediğinize emin misiniz?`)) {
             const formData = this.getFormData()
 
-            axios.put(`${process.env.REACT_APP_API_URL}/admin/product/${this.state.updateId}`, formData, {
+            axios.put(`${process.env.REACT_APP_API_URL}/products/${this.state.updateId}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -272,10 +272,11 @@ class UpdateProductComponent extends Component {
     }
 
     onReferenceSelect = state => {
+        console.log(state)
         if (state.updateId) {
             const imageRequests = Array.from(new Array(state.imageCount)).map((_, index) => {
                 try {
-                    return this.getImage(state.image, index)
+                    return this.getImage(state.slug, index)
                 } catch (error) {
                     return false
                 }

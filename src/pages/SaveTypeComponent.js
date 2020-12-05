@@ -25,7 +25,7 @@ class SaveTypeComponent extends Component {
                 body.specifications = this.state.specifications.trim().split(',')
             }
 
-            axios.post(`${process.env.REACT_APP_API_URL}/admin/save-type`, body).then(({ status, data }) => {
+            axios.post(`${process.env.REACT_APP_API_URL}/types`, body).then(({ status, data }) => {
                 if (status === 200) {
                     VanillaToasts.create({
                         title: 'Ürün tipi eklendi',

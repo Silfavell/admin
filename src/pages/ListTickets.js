@@ -9,7 +9,7 @@ class ListTickets extends Component {
     }
 
     getTickets = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/admin/tickets`).then(({ data }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/tickets/all`).then(({ data }) => data)
     )
 
     UNSAFE_componentWillMount() {

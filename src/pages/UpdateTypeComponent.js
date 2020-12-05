@@ -16,7 +16,7 @@ class UpdateTypeComponent extends Component {
     }
 
     getTypes = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/admin/types`).then(({ data, status }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/types`).then(({ data, status }) => data)
     )
 
     UNSAFE_componentWillMount() {
@@ -52,7 +52,7 @@ class UpdateTypeComponent extends Component {
                     body.specifications = this.state.specifications.trim().split(',')
                 }
 
-                axios.put(`${process.env.REACT_APP_API_URL}/admin/update-type/${this.state.typeId}`, body).then(({ status }) => {
+                axios.put(`${process.env.REACT_APP_API_URL}/types/${this.state.typeId}`, body).then(({ status }) => {
                     if (status === 200) {
                         VanillaToasts.create({
                             title: 'Ürün tipi güncellendi',

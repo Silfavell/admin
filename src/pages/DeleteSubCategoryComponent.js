@@ -34,7 +34,7 @@ class DeleteSubCategoryComponent extends Component {
     onDeleteClick = () => {
         if (this.state.categoryId.length > 0 && this.state.subCategoryId.length > 0) {
             if (window.confirm(`Seçili alt kategoriyi silmek istediğinize emin misiniz?`)) {
-                axios.delete(`${process.env.REACT_APP_API_URL}/admin/sub-category?parentCategoryId=${this.state.categoryId}&_id=${this.state.subCategoryId}`).then(({ status }) => {
+                axios.delete(`${process.env.REACT_APP_API_URL}/categories/sub-category/${this.state.categoryId}/${this.state.subCategoryId}`).then(({ status }) => {
                     if (status === 200) {
                         VanillaToasts.create({
                             title: 'Alt lategori silindi',

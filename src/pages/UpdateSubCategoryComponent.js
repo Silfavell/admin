@@ -22,7 +22,7 @@ class UpdateSubCategoryComponent extends Component {
     )
 
     getTypes = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/admin/types`).then(({ data, status }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/types`).then(({ data, status }) => data)
     )
 
     UNSAFE_componentWillMount() {
@@ -46,7 +46,7 @@ class UpdateSubCategoryComponent extends Component {
         else if (name === 'subCategoryId') {
             const selectedCategory = this.state.categories.find((category) => category._id === this.state.categoryId)
             const selectedSubCategory = selectedCategory.subCategories.find((subCategory) => subCategory._id === value)
-            const selectedTypes = selectedSubCategory.types.map((type) => type._id)
+            const selectedTypes = selectedSubCategory.types
 
             this.setState({
                 [name]: value,
@@ -71,7 +71,7 @@ class UpdateSubCategoryComponent extends Component {
     onUpdateClick = () => {
         if (this.state.categoryId.length > 0 && this.state.subCategoryId.length > 0 && this.state.name.length > 0) {
             if (window.confirm(`Seçili alt kategoriyi güncellemek istediğinize emin misiniz?`)) {
-                axios.put(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
+                axios.put(`${process.env.REACT_APP_API_URL}/categories/sub-category`, {
                     parentCategoryId: this.state.categoryId,
                     subCategoryId: this.state.subCategoryId,
                     name: this.state.name,
@@ -103,11 +103,12 @@ class UpdateSubCategoryComponent extends Component {
         const {
             categories,
             types,
-
             categoryId,
             subCategoryId,
             name
         } = this.state
+
+        console.log(this.state)
 
         return (
             <div className='p-3 border'>
@@ -176,17 +177,17 @@ class UpdateSubCategoryComponent extends Component {
                                 <div className='form-group row'>
                                     <div className='col-md-12'>
                                         <label>Alt kategorinin içerebileceği ürün tiplerini seçiniz</label>
-                                        <ul class='list-group'>
+                                        <ul className='list-group'>
                                             {
                                                 types.map((type) => (
-                                                    <li class='list-group-item'>
-                                                        <div class='custom-control custom-checkbox'>
+                                                    <li className='list-group-item'>
+                                                        <div className='custom-control custom-checkbox'>
                                                             <input
                                                                 type='checkbox'
-                                                                class='custom-control-input'
+                                                                className='custom-control-input'
                                                                 onChange={this.onTypeSelect} id={type._id}
                                                                 checked={this.state.selectedTypes.includes(type._id)} />
-                                                            <label class='custom-control-label' for={type._id} style={{ cursor: 'pointer' }}>{type.name}</label>
+                                                            <label className='custom-control-label' htmlFor={type._id} style={{ cursor: 'pointer' }}>{type.name}</label>
                                                         </div>
                                                     </li>
                                                 ))

@@ -33,7 +33,7 @@ class DeleteProductComponent extends Component {
         if (this.state.deleteId.length > 0) {
             if (window.confirm(`Seçili ürünü silmek istediğinize emin misiniz?`)) {
 
-                axios.delete(`${process.env.REACT_APP_API_URL}/admin/product/${this.state.deleteId}`).then(({ status }) => {
+                axios.delete(`${process.env.REACT_APP_API_URL}/products/${this.state.deleteId}`).then(({ status }) => {
                     if (status === 200) {
                         VanillaToasts.create({
                             title: 'Ürün silindi',

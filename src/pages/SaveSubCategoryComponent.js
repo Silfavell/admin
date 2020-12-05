@@ -32,7 +32,7 @@ class SaveSubCategoryComponent extends Component {
 
     onSaveClick = () => {
         if (window.confirm(`${this.state.subCategoryName} isimli alt kategoriyi eklemek istediğinize emin misiniz ?`)) {
-            axios.post(`${process.env.REACT_APP_API_URL}/admin/sub-category`, {
+            axios.post(`${process.env.REACT_APP_API_URL}/categories/sub-category`, {
                 parentCategoryId: this.state.parentCategory,
                 name: this.state.subCategoryName,
                 types: this.state.selectedTypes
@@ -54,7 +54,7 @@ class SaveSubCategoryComponent extends Component {
     )
 
     getTypes = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/admin/types`).then(({ data, status }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/types`).then(({ data, status }) => data)
     )
 
     UNSAFE_componentWillMount() {

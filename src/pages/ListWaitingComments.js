@@ -10,11 +10,11 @@ class ListWaitingComments extends Component {
     }
 
     getWaitingComments = () => (
-        axios.get(`${process.env.REACT_APP_API_URL}/admin/waiting-comments`).then(({ data }) => data)
+        axios.get(`${process.env.REACT_APP_API_URL}/comments/waiting-list`).then(({ data }) => data)
     )
 
     verifyComment = (_id) => {
-        axios.put(`${process.env.REACT_APP_API_URL}/admin/verify-comment/${_id}`).then(({ status }) => {
+        axios.put(`${process.env.REACT_APP_API_URL}/comments/verify-comment/${_id}`).then(({ status }) => {
             VanillaToasts.create({
                 title: 'Yorum Onaylandı',
                 type: 'success',
@@ -25,7 +25,7 @@ class ListWaitingComments extends Component {
     }
 
     deleteComment = (_id) => {
-        axios.delete(`${process.env.REACT_APP_API_URL}/admin/delete-comment/${_id}`).then(({ status }) => {
+        axios.delete(`${process.env.REACT_APP_API_URL}/comments/delete-comment/${_id}`).then(({ status }) => {
             VanillaToasts.create({
                 title: 'Yorum Silindi',
                 type: 'success',

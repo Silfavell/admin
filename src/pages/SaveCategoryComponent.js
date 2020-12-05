@@ -17,7 +17,7 @@ class SaveSubCategoryComponent extends Component {
 
     onSaveClick = () => {
         if (window.confirm(`${this.state.name} isimli kategoriyi eklemek istediğinize emin misiniz ?`)) {
-            axios.post(`${process.env.REACT_APP_API_URL}/admin/category`, {
+            axios.post(`${process.env.REACT_APP_API_URL}/categories`, {
                 name: this.state.name
             }).then(({ status, data }) => {
                 if (status === 200) {

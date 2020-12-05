@@ -34,7 +34,7 @@ class UpdateCategoryComponent extends Component {
     onUpdateClick = () => {
         if (this.state.categoryId.length > 0 && this.state.name.length > 0) {
             if (window.confirm(`Seçili kategoriyi güncellemek istediğinize emin misiniz?`)) {
-                axios.put(`${process.env.REACT_APP_API_URL}/admin/category/${this.state.categoryId}`, { name: this.state.name }).then(({ status }) => {
+                axios.put(`${process.env.REACT_APP_API_URL}/categories/${this.state.categoryId}`, { name: this.state.name }).then(({ status }) => {
                     if (status === 200) {
                         VanillaToasts.create({
                             title: 'Kategori güncellendi',
