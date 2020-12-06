@@ -48,11 +48,17 @@ class SaveProductComponent extends Component {
       .get(`${process.env.REACT_APP_API_URL}/products`)
       .then(({ data, status }) => data);
 
-    getImage = (slug, index) => {
-        return axios.get(`${process.env.REACT_APP_API_URL}/static?folder=products&image=${slug}_${index}_940x940.webp`, { responseType: 'blob' }).then(({ data }) => {
-            return data
-        }).catch(() => null)
-    }
+  getImage = (slug, index) => {
+    return axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/static?folder=products&image=${slug}_${index}_940x940.webp`,
+        { responseType: "blob" }
+      )
+      .then(({ data }) => {
+        return data;
+      })
+      .catch(() => null);
+  };
 
   async UNSAFE_componentWillMount() {
     const [categories, products] = await Promise.all([
@@ -142,8 +148,6 @@ class SaveProductComponent extends Component {
       purchasable,
       images,
     } = this.state;
-
-    console.log(this.state)
 
     const formData = new FormData();
     // eslint-disable-next-line
@@ -615,7 +619,7 @@ class SaveProductComponent extends Component {
               <label htmlFor="colorCode" className="text-black">
                 Renk kodu
               </label>
-              <div class="input-group">
+              <div className="input-group">
                 <input
                   type="text"
                   className="form-control"
@@ -625,8 +629,8 @@ class SaveProductComponent extends Component {
                   value={colorCode}
                   placeholder="Renk kodu giriniz"
                 />
-                <div class="input-group-append">
-                  <div class="input-group-text bg-white">
+                <div className="input-group-append">
+                  <div className="input-group-text bg-white">
                     <span
                       className="border"
                       style={{

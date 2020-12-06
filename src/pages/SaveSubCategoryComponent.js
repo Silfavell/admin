@@ -111,17 +111,17 @@ class SaveSubCategoryComponent extends Component {
                 <div className='form-group'>
                     <div className='col-md-12'>
                         <label>Alt kategorinin içerebileceği ürün tiplerini seçiniz</label>
-                        <ul class='list-group'>
+                        <ul className='list-group'>
                             {
                                 types.map((type) => (
-                                    <li class='list-group-item'>
-                                        <div class='custom-control custom-checkbox'>
+                                    <li className='list-group-item'>
+                                        <div className='custom-control custom-checkbox'>
                                             <input
                                                 type='checkbox'
-                                                class='custom-control-input'
+                                                className='custom-control-input'
                                                 onChange={this.onTypeSelect} id={type._id}
                                                 checked={this.state.selectedTypes.includes(type._id)} />
-                                            <label class='custom-control-label' for={type._id} style={{ cursor: 'pointer' }}>{type.name}</label>
+                                            <label className='custom-control-label' for={type._id} style={{ cursor: 'pointer' }}>{type.name}</label>
                                         </div>
                                     </li>
                                 ))
